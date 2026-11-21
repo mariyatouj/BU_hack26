@@ -224,3 +224,5 @@ __marimo__/
 
 # Node
 node_modules/
+
+.DS_Store
