@@ -20,6 +20,9 @@ def test_pantries_sorted_by_distance():
         assert rows[0]["distance_km"] <= rows[-1]["distance_km"]
         d = c.get(f"/api/pantries/{rows[0]['id']}").json()
         assert d["items"] and "recipes" in d
+        assert d["phone"] and d["source_url"]
+        assert d["inventory_status"] == "demo"
+        assert all(item["source"] == "demo" for item in d["items"])
 
 
 def test_recipe_upload_awards_points_and_triggers_alert():
@@ -61,3 +64,58 @@ def test_leaderboard_groups_and_ai_fallback():
         ai = c.post("/api/ai/suggest", json={"pantry_id": 4, "dietary": ["Vegan"]}).json()
         assert ai["source"] == "fallback" and ai["meals"]
         assert all(m["title"] != "Egg fried rice" for m in ai["meals"])  # not vegan
+
+
+def test_directions_uses_origin_once_and_disables_caching(monkeypatch):
+    seen = {}
+
+    async def fake_snapshot(origin, destination):
+        seen["origin"] = origin
+        seen["destination"] = destination
+        return {
+            "source": "mbta-v3",
+            "live": True,
+            "routing_mode": "nearby-stops",
+            "generated_at": "2026-11-21T12:00:00+00:00",
+            "origin_stored": False,
+            "directions_url": "https://www.google.com/maps/dir/?api=1&destination=42.1%2C-71.1&travelmode=transit",
+            "origin_stops": [],
+            "destination_stops": [],
+            "predictions": [],
+            "alerts": [],
+            "warnings": [],
+        }
+
+    monkeypatch.setattr("app.main.transit.transit_snapshot", fake_snapshot)
+    with client() as c:
+        response = c.post("/api/directions", json={
+            "pantry_id": 1,
+            "origin_lat": 12.345678,
+            "origin_lng": -45.678912,
+        })
+
+    assert response.status_code == 200
+    assert response.headers["cache-control"] == "no-store, max-age=0"
+    assert response.headers["pragma"] == "no-cache"
+    assert seen["origin"] == (12.346, -45.679)  # only an approximate area reaches MBTA
+    assert seen["destination"] == (response.json()["pantry"]["lat"], response.json()["pantry"]["lng"])
+    assert response.json()["origin_stored"] is False
+    assert "12.345678" not in response.text
+    assert "-45.678912" not in response.text
+
+
+def test_directions_validation_and_missing_pantry():
+    with client() as c:
+        bad_location = c.post("/api/directions", json={
+            "pantry_id": 1,
+            "origin_lat": 100,
+            "origin_lng": -71,
+        })
+        missing = c.post("/api/directions", json={
+            "pantry_id": 99999,
+            "origin_lat": 42.35,
+            "origin_lng": -71.1,
+        })
+
+    assert bad_location.status_code == 422
+    assert missing.status_code == 404

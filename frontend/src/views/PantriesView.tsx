@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import BostonMap from '../components/BostonMap'
 import { Chips, DIETS, CULTURES, LEVEL_LABEL, Modal, Stars, StockBar, ago } from '../components/ui'
 import { useApp } from '../context'
-import type { Meal, PantryDetail, Pantry, RecipeIn, Suggestion } from '../types'
+import { haversineKm } from '../geo'
+import { getOneTimeLocation } from '../location'
+import type { Directions, Meal, PantryDetail, Pantry, RecipeIn, Suggestion } from '../types'
 import ShareRecipe from './ShareRecipe'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -11,21 +13,26 @@ const MODEL_LABEL: Record<string, string> = {
   'pre-packed': 'Pre-packed boxes',
   mobile: 'Mobile / free fridge',
   'drive-thru': 'Drive-thru pickup',
+  unknown: 'Call pantry to confirm distribution',
 }
 
-const SHORT: Record<string, string> = { 'client-choice': 'Client choice', 'pre-packed': 'Pre-packed', mobile: 'Mobile / fridge', 'drive-thru': 'Drive-thru' }
+const SHORT: Record<string, string> = { 'client-choice': 'Client choice', 'pre-packed': 'Pre-packed', mobile: 'Mobile / fridge', 'drive-thru': 'Drive-thru', unknown: 'Call ahead' }
 
 function openToday(p: Pantry) {
   const today = DAYS[new Date().getDay()]
-  return p.hours[today] ?? p.hours['Daily'] ?? null
+  const hours = p.hours[today] ?? p.hours['Daily']
+  return hours && !/^closed$/i.test(hours.trim()) ? hours : null
 }
 
+const hasVerifiedHours = (p: Pantry) => Object.keys(p.hours).length > 0
+
 export default function PantriesView() {
-  const { pantries, loc, setLoc, focusPantry } = useApp()
+  const { pantries, loc, setLoc, focusPantry, toast } = useApp()
   const [sel, setSel] = useState<number | null>(focusPantry)
   const [feature, setFeature] = useState<string[]>([])
   const [model, setModel] = useState<string[]>([])
   const [todayOnly, setTodayOnly] = useState(false)
+  const [locating, setLocating] = useState(false)
 
   useEffect(() => { if (focusPantry) setSel(focusPantry) }, [focusPantry])
 
@@ -34,10 +41,29 @@ export default function PantriesView() {
     feature.every((f) => p.features.includes(f)) && (!model.length || model.includes(p.distribution_model)) && (!todayOnly || openToday(p)))
   const dim = new Set(pantries.filter((p) => !shown.includes(p)).map((p) => p.id))
 
+  const useMyLocation = async () => {
+    setLocating(true)
+    try {
+      const here = await getOneTimeLocation()
+      setLoc([here.lat, here.lng])
+      toast(`Map centered near you${here.accuracy_m ? ` · ±${here.accuracy_m} m` : ''}`)
+    } catch (error) {
+      toast((error as Error).message)
+    } finally {
+      setLocating(false)
+    }
+  }
+
   return (
     <div className="split">
       <section className="map-wrap">
         <BostonMap pantries={pantries} selectedId={sel} onSelect={setSel} you={loc} onMoveYou={(a, b) => setLoc([a, b])} dimIds={dim} />
+        <div className="location-action">
+          <button className="btn small primary" onClick={useMyLocation} disabled={locating}>
+            {locating ? 'Finding you…' : 'Use my location'}
+          </button>
+          <span>Used in this tab only · not saved</span>
+        </div>
         <div className="map-legend">
           <span><i className="dot good" />Plenty</span><span><i className="dot mid" />Some</span><span><i className="dot bad" />Running low</span>
           <span className="muted">Tap the map to move your location</span>
@@ -49,6 +75,7 @@ export default function PantriesView() {
             <div className="panel-head">
               <h1>Pantries near you</h1>
               <p className="muted">{shown.length} of {pantries.length} pantries · sorted by distance</p>
+              <p className="muted small">Locations are historical public directory records; colored stock levels are demo values. <a href="https://www.gbfb.org/need-food/" target="_blank" rel="noreferrer">Check the current GBFB locator ↗</a></p>
             </div>
             <div className="filters">
               <label className="switch"><input type="checkbox" checked={todayOnly} onChange={(e) => setTodayOnly(e.target.checked)} /> Open today</label>
@@ -68,10 +95,12 @@ export default function PantriesView() {
                       <span className="muted">{p.neighborhood} · {SHORT[p.distribution_model]}</span>
                       <span className="pcard-meta">
                         {p.rating ? <><Stars value={p.rating} /> <span>{p.rating}</span></> : <span className="muted">No ratings</span>}
-                        <span className={openToday(p) ? 'open' : 'muted'}>{openToday(p) ? `Open today ${openToday(p)}` : 'Closed today'}</span>
+                        <span className={openToday(p) ? 'open' : 'muted'}>
+                          {openToday(p) ? `Open today ${openToday(p)}` : hasVerifiedHours(p) ? 'Closed today' : 'Hours not verified — call ahead'}
+                        </span>
                       </span>
                     </span>
-                    <span className="pcard-dist">{p.distance_km?.toFixed(1)}<small> km</small></span>
+                    <span className="pcard-dist">{p.distance_km?.toFixed(1) ?? '–'}<small> km</small></span>
                   </button>
                 </li>
               ))}
@@ -95,8 +124,11 @@ function Detail({ id, onBack }: { id: number; onBack: () => void }) {
   const [sug, setSug] = useState<Suggestion | null>(null)
   const [loading, setLoading] = useState(false)
   const [share, setShare] = useState<Partial<RecipeIn> | null>(null)
+  const [directions, setDirections] = useState<Directions | null>(null)
+  const [directionsBusy, setDirectionsBusy] = useState(false)
+  const [directionsError, setDirectionsError] = useState('')
 
-  const load = () => api.pantry(id, loc[0], loc[1]).then(setP)
+  const load = () => api.pantry(id).then(setP)
   useEffect(() => { setSug(null); load() }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!p) return <div className="panel-head"><p className="muted">Loading…</p></div>
@@ -113,20 +145,38 @@ function Detail({ id, onBack }: { id: number; onBack: () => void }) {
     else toast(r.message ?? 'Already checked in')
     load()
   }
+  const getDirections = async () => {
+    setDirectionsBusy(true)
+    setDirectionsError('')
+    setDirections(null)
+    try {
+      // Kept in this function only: it is sent once for routing and never stored in app state.
+      const origin = await getOneTimeLocation()
+      setDirections(await api.directions(p.id, origin.lat, origin.lng))
+    } catch (error) {
+      setDirectionsError((error as Error).message)
+    } finally {
+      setDirectionsBusy(false)
+    }
+  }
   const fromMeal = (m: Meal): Partial<RecipeIn> => ({
     title: m.title, description: m.how, ingredients: [...m.uses, ...m.missing], culture_tags: [m.culture], pantry_id: p.id, minutes: m.minutes,
   })
+  const distanceKm = haversineKm(loc[0], loc[1], p.lat, p.lng)
+  const fallbackDirections = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${p.lat},${p.lng}`)}&travelmode=transit`
 
   return (
     <div className="detail">
       <button className="back" onClick={onBack}>← All pantries</button>
       <header className="detail-head">
         <h1>{p.name}</h1>
-        <p className="muted">{p.address} · {p.neighborhood} · {p.distance_km?.toFixed(1)} km away</p>
+        <p className="muted">{p.address} · {p.neighborhood} · {distanceKm.toFixed(1)} km away</p>
         <div className="row">
           {p.rating ? <><Stars value={p.rating} /><span>{p.rating} ({p.rating_count})</span></> : <span className="muted">No ratings yet</span>}
           <span className={`badge ${p.inventory_level}`}>Inventory: {LEVEL_LABEL[p.inventory_level]}</span>
-          {p.verified && <span className="badge ok">Verified</span>}
+          {p.inventory_status === 'demo' && <span className="badge">Demo inventory</span>}
+          {p.inventory_status === 'mixed' && <span className="badge">Demo + reported inventory</span>}
+          {p.source_url ? <span className="badge ok">Public directory record</span> : p.verified && <span className="badge ok">Community verified</span>}
         </div>
       </header>
 
@@ -137,22 +187,61 @@ function Detail({ id, onBack }: { id: number; onBack: () => void }) {
       </div>
 
       <div className="row gap">
+        <button className="btn primary" onClick={getDirections} disabled={directionsBusy}>{directionsBusy ? 'Checking the T…' : 'Get transit directions'}</button>
         <button className="btn primary" onClick={visit}>I'm here — check in <small>+10</small></button>
         <button className="btn" onClick={() => setRating(true)}>Rate <small>+5</small></button>
         <button className="btn" onClick={() => setStock(true)}>Report stock <small>+5</small></button>
       </div>
+      <p className="muted small privacy-note">Your device location is requested only when you ask for directions and is not saved. Pantry Pass sends MBTA only a rounded area for nearby-stop lookup; the external route planner receives no origin from us.</p>
+
+      {(directions || directionsError) && (
+        <section className="transit-card" aria-live="polite">
+          <header>
+            <div>
+              <h2>{directions?.live ? 'Live MBTA options' : 'Transit directions'}</h2>
+              {directions && <p className="muted small">Updated {new Date(directions.generated_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} · location discarded after request</p>}
+            </div>
+            <a className="btn small primary" href={directions?.directions_url ?? fallbackDirections} target="_blank" rel="noreferrer">Open full route ↗</a>
+          </header>
+          {directionsError && <p className="error">{directionsError} You can still open directions without sharing your origin with Pantry Pass.</p>}
+          {directions && directions.origin_stops.length > 0 && (
+            <div className="transit-stops">
+              <div><strong>Board near you</strong><span>{directions.origin_stops.slice(0, 2).map((s) => `${s.name} (${Math.round(s.distance_m)} m)`).join(' · ')}</span></div>
+              {directions.destination_stops.length > 0 && <div><strong>Get off near the pantry</strong><span>{directions.destination_stops.slice(0, 2).map((s) => `${s.name} (${Math.round(s.distance_m)} m)`).join(' · ')}</span></div>}
+            </div>
+          )}
+          {directions && directions.predictions.length > 0 && (
+            <ul className="transit-predictions">
+              {directions.predictions.slice(0, 5).map((prediction) => (
+                <li key={prediction.id}>
+                  <i style={{ background: `#${prediction.route.color || '165c35'}`, color: `#${prediction.route.text_color || 'ffffff'}` }}>{prediction.route.short_name || prediction.route.name}</i>
+                  <span><strong>{prediction.route.name}</strong><small>{prediction.status}</small></span>
+                  <b>{prediction.minutes == null ? '—' : prediction.minutes <= 0 ? 'Now' : `${prediction.minutes} min`}</b>
+                </li>
+              ))}
+            </ul>
+          )}
+          {directions && directions.alerts.length > 0 && <p className="transit-alert"><strong>Service alert:</strong> {directions.alerts[0].header}</p>}
+          {directions?.warnings.map((warning) => <p key={warning} className="muted small">{warning}</p>)}
+        </section>
+      )}
 
       <section className="block">
         <h2>Hours & how it works</h2>
-        <ul className="hours">
-          {Object.entries(p.hours).map(([d, h]) => <li key={d} className={d === today || d === 'Daily' ? 'today' : ''}><span>{d}</span><span>{h}</span></li>)}
-        </ul>
+        {hasVerifiedHours(p) ? (
+          <ul className="hours">
+            {Object.entries(p.hours).map(([d, h]) => <li key={d} className={d === today || d === 'Daily' ? 'today' : ''}><span>{d}</span><span>{h}</span></li>)}
+          </ul>
+        ) : <p className="call-ahead"><strong>Hours have not been verified.</strong> Call the pantry before traveling.</p>}
+        {p.phone && <p><strong>Phone:</strong> <a href={`tel:${p.phone}`}>{p.phone}</a></p>}
         <p><strong>Distribution:</strong> {MODEL_LABEL[p.distribution_model]}</p>
         <div className="chips static">{p.features.map((f) => <span key={f} className="chip">{f}</span>)}</div>
+        {p.source_url && <p className="small">Source: {p.source_name ? `${p.source_name} · ` : ''}<a href={p.source_url} target="_blank" rel="noreferrer">View listing ↗</a></p>}
       </section>
 
       <section className="block">
         <h2>On the shelf <span className="muted small">updated {ago(p.last_updated)}</span></h2>
+        {(p.inventory_status === 'demo' || p.inventory_status === 'mixed') && <p className="demo-inventory-note">Some or all inventory values are prototype data for demonstration — call ahead; availability is not guaranteed.</p>}
         <div className="shelf">
           {Object.entries(byCat).map(([cat, items]) => (
             <div key={cat}>

@@ -4,6 +4,7 @@
  * UI can be demoed with no server. State resets on reload.
  */
 import seed from '../../../data/seed.json'
+import inventoryCsv from '../../../data/demo_inventory.csv?raw'
 import type { Api } from '../api'
 import { getUserId } from '../session'
 import type { AlertIn, FoodAlert, Item, Level, Meal, Notice, Pantry, PantryDetail, Recipe, User } from '../types'
@@ -55,7 +56,7 @@ type DUser = Omit<User, 'level'>
 interface DPantry extends Omit<Pantry, 'rating' | 'rating_count' | 'item_count' | 'last_updated' | 'cooks_last_30d' | 'visits_last_30d' | 'distance_km'> {
   submitted_by?: number
 }
-interface DItem { pantry_id: number; name: string; category: string; level: Level; t: number }
+interface DItem { pantry_id: number; name: string; category: string; level: Level; source: Item['source']; t: number }
 interface DRecipe { id: number; user_id: number; pantry_id: number | null; title: string; description: string; ingredients: string[]; steps: string[]; culture_tags: string[]; dietary_tags: string[]; image_url: string | null; minutes: number; t: number }
 interface DAlert extends Omit<FoodAlert, 'matches' | 'created_at'> { user_id: number; t: number }
 
@@ -84,10 +85,18 @@ function award(uid: number, action: string, ref: number | null = null, t = now()
   const t0 = now()
   db.users = seed.users.map((u) => ({ ...u, points: 0 }))
   for (const p of seed.pantries) {
-    const { items, ...rest } = p
-    db.pantries.push({ ...(rest as unknown as DPantry), verified: true })
-    items.forEach(([name, category, lvl], i) =>
-      db.items.push({ pantry_id: p.id, name, category, level: lvl as Level, t: t0 - (6 + i * 3 + p.id * 5) * H }))
+    db.pantries.push({ ...(p as unknown as DPantry), verified: true })
+  }
+  for (const line of inventoryCsv.trim().split(/\r?\n/).slice(1)) {
+    const [pantryId, name, category, itemLevel, hoursAgo] = line.split(',')
+    db.items.push({
+      pantry_id: Number(pantryId),
+      name,
+      category,
+      level: itemLevel as Level,
+      source: 'demo',
+      t: t0 - Number(hoursAgo) * H,
+    })
   }
   for (const r of seed.recipes) {
     const { ratings, days_ago, ...rest } = r
@@ -139,6 +148,7 @@ function score(wanted: string[], stock: Set<string>) {
 function pantryOut(p: DPantry, lat?: number, lng?: number): Pantry {
   const stars = db.pratings.filter((r) => r.pantry_id === p.id).map((r) => r.stars)
   const items = latest(p.id)
+  const sources = new Set(items.map((i) => i.source))
   const month = now() - 30 * D
   return {
     ...p,
@@ -149,6 +159,10 @@ function pantryOut(p: DPantry, lat?: number, lng?: number): Pantry {
     cooks_last_30d: new Set(db.recipes.filter((r) => r.pantry_id === p.id && r.t >= month).map((r) => r.user_id)).size,
     visits_last_30d: db.events.filter((e) => e.action === 'visit_pantry' && e.ref === p.id && e.t >= month).length,
     distance_km: lat != null && lng != null ? Math.round(km(lat, lng, p.lat, p.lng) * 100) / 100 : null,
+    inventory_status: !items.length ? 'unknown'
+      : sources.size === 1 && sources.has('demo') ? 'demo'
+        : sources.has('demo') ? 'mixed'
+          : 'reported',
   }
 }
 
@@ -195,18 +209,38 @@ export const mock: Api = {
   }),
   rules: () => delay({ points: POINTS, prizes: PRIZES }),
 
-  pantries: (lat, lng) => delay(db.pantries.filter((p) => p.verified).map((p) => pantryOut(p, lat, lng)).sort((a, b) => a.distance_km! - b.distance_km!)),
-  pantry: (id, lat, lng) => {
+  pantries: () => delay(db.pantries.filter((p) => p.verified).map((p) => pantryOut(p))),
+  pantry: (id) => {
     const p = db.pantries.find((x) => x.id === id)
     if (!p) return fail('Pantry not found')
     const detail: PantryDetail = {
-      ...pantryOut(p, lat, lng),
-      items: latest(id).map((i): Item => ({ name: i.name, category: i.category, level: i.level, updated_at: iso(i.t) }))
+      ...pantryOut(p),
+      items: latest(id).map((i): Item => ({ name: i.name, category: i.category, level: i.level, source: i.source, updated_at: iso(i.t) }))
         .sort((a, b) => a.category.localeCompare(b.category) || a.name.localeCompare(b.name)),
       reviews: db.pratings.filter((r) => r.pantry_id === id).map((r) => ({ stars: r.stars, comment: r.comment, created_at: iso(r.t) })),
       recipes: db.recipes.filter((r) => r.pantry_id === id).sort((a, b) => b.t - a.t).map(recipeOut),
     }
     return delay(detail)
+  },
+  directions: (pantry_id, _origin_lat, _origin_lng) => {
+    const p = db.pantries.find((x) => x.id === pantry_id)
+    if (!p) return fail('Pantry not found')
+    const destination = encodeURIComponent(`${p.lat},${p.lng}`)
+    return delay({
+      pantry: { id: p.id, name: p.name, address: p.address, lat: p.lat, lng: p.lng },
+      source: 'fallback' as const,
+      live: false,
+      routing_mode: 'external' as const,
+      generated_at: iso(now()),
+      origin_stored: false as const,
+      // Origin is deliberately omitted so Pantry Pass never writes it into browser history.
+      directions_url: `https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=transit`,
+      origin_stops: [],
+      destination_stops: [],
+      predictions: [],
+      alerts: [],
+      warnings: ['Demo mode: open the transit planner for live routing.'],
+    })
   },
   visit: (id) => {
     const dup = db.events.some((e) => e.user_id === me().id && e.action === 'visit_pantry' && e.ref === id && e.t >= now() - 12 * H)
@@ -219,7 +253,7 @@ export const mock: Api = {
   },
   updateInventory: (id, items) => {
     const p = db.pantries.find((x) => x.id === id)!
-    items.forEach((i) => db.items.push({ pantry_id: id, name: i.name, category: i.category, level: i.level as Level, t: now() }))
+    items.forEach((i) => db.items.push({ pantry_id: id, name: i.name, category: i.category, level: i.level as Level, source: 'community', t: now() }))
     const pts = award(me().id, 'update_inventory', id)
     let hits = 0
     const stock = fresh(id)

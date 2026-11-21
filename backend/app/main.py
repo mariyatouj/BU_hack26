@@ -8,13 +8,14 @@ from datetime import timedelta
 from statistics import mean
 from typing import Literal
 
-from fastapi import Depends, FastAPI, Header, HTTPException, Query
+from fastapi import Depends, FastAPI, Header, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from . import alerts as alert_engine
+from . import transit
 from .db import get_db
 from .gemini import suggest_meals
 from .models import (Alert, InventoryItem, Notification, Pantry, PantryRating, PointEvent, Recipe, RecipeRating,
@@ -73,10 +74,19 @@ def pantry_out(db: Session, p: Pantry, lat: float | None = None, lng: float | No
                       .where(Recipe.pantry_id == p.id, Recipe.created_at >= month_ago)) or 0
     visits = db.scalar(select(func.count(PointEvent.id)).where(
         PointEvent.action == "visit_pantry", PointEvent.ref_id == p.id, PointEvent.created_at >= month_ago)) or 0
+    item_sources = {i.source or "community" for i in items}
+    inventory_status = (
+        "unknown" if not item_sources else
+        "demo" if item_sources == {"demo"} else
+        "mixed" if "demo" in item_sources else
+        "reported"
+    )
     out = {
         "id": p.id, "name": p.name, "address": p.address, "neighborhood": p.neighborhood,
+        "phone": p.phone, "source_name": p.source_name, "source_url": p.source_url,
         "lat": p.lat, "lng": p.lng, "distribution_model": p.distribution_model, "hours": p.hours,
         "features": p.features, "inventory_level": p.inventory_level, "verified": p.verified,
+        "inventory_status": inventory_status,
         "rating": round(mean(stars), 1) if stars else None, "rating_count": len(stars),
         "item_count": len([i for i in items if i.level != "out"]),
         "last_updated": max((i.updated_at for i in items), default=None),
@@ -84,7 +94,8 @@ def pantry_out(db: Session, p: Pantry, lat: float | None = None, lng: float | No
         "distance_km": round(alert_engine.haversine_km(lat, lng, p.lat, p.lng), 2) if lat is not None and lng is not None else None,
     }
     if detail:
-        out["items"] = [{"name": i.name, "category": i.category, "level": i.level, "updated_at": i.updated_at}
+        out["items"] = [{"name": i.name, "category": i.category, "level": i.level,
+                         "source": i.source or "community", "updated_at": i.updated_at}
                         for i in sorted(items, key=lambda i: (i.category, i.name))]
         out["reviews"] = [{"stars": r.stars, "comment": r.comment, "created_at": r.created_at} for r in p.ratings]
         recs = db.scalars(select(Recipe).where(Recipe.pantry_id == p.id).order_by(Recipe.created_at.desc())).all()
@@ -162,6 +173,14 @@ class PantryRatingIn(BaseModel):
     comment: str | None = None
 
 
+class DirectionsIn(BaseModel):
+    """A one-time origin. Coordinates are never persisted or returned."""
+
+    pantry_id: int = Field(gt=0)
+    origin_lat: float = Field(ge=-90, le=90)
+    origin_lng: float = Field(ge=-180, le=180)
+
+
 @app.get("/api/pantries")
 def list_pantries(lat: float | None = None, lng: float | None = None, feature: str | None = None,
                   model: str | None = None, include_unverified: bool = False, db: Session = Depends(get_db)):
@@ -194,6 +213,35 @@ def pantry_history(pantry_id: int, days: int = 30, db: Session = Depends(get_db)
     return [{"name": r.name, "level": r.level, "updated_at": r.updated_at} for r in rows]
 
 
+@app.post("/api/directions")
+async def directions(body: DirectionsIn, response: Response, db: Session = Depends(get_db)):
+    """Live nearby MBTA information plus a transit-directions handoff.
+
+    This endpoint is intentionally anonymous and request-scoped: it does not
+    depend on a user, award points, or write the supplied origin anywhere.
+    """
+    response.headers["Cache-Control"] = "no-store, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    pantry = db.get(Pantry, body.pantry_id) or _404("Pantry")
+    # Nearby-stop lookup needs only a neighborhood-scale origin. Coarsen it
+    # before it leaves our server so MBTA never receives the device fix.
+    approximate_origin = (round(body.origin_lat, 3), round(body.origin_lng, 3))
+    snapshot = await transit.transit_snapshot(
+        approximate_origin,
+        (pantry.lat, pantry.lng),
+    )
+    return {
+        "pantry": {
+            "id": pantry.id,
+            "name": pantry.name,
+            "address": pantry.address,
+            "lat": pantry.lat,
+            "lng": pantry.lng,
+        },
+        **snapshot,
+    }
+
+
 @app.post("/api/pantries", status_code=201)
 def submit_pantry(body: PantryIn, user: User = Depends(current_user), db: Session = Depends(get_db)):
     p = Pantry(**body.model_dump(), verified=False, submitted_by=user.id)
@@ -218,7 +266,7 @@ def update_inventory(pantry_id: int, body: InventoryIn, user: User = Depends(cur
                      db: Session = Depends(get_db)):
     p = db.get(Pantry, pantry_id) or _404("Pantry")
     for it in body.items:
-        db.add(InventoryItem(pantry_id=p.id, **it.model_dump()))
+        db.add(InventoryItem(pantry_id=p.id, source="community", **it.model_dump()))
     if body.inventory_level:
         p.inventory_level = body.inventory_level
     pts = award(db, user, "update_inventory", p.id)

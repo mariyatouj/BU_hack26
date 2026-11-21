@@ -1,0 +1,67 @@
+pantry_id,name,category,level,hours_ago
+1,rice,grains,high,6
+1,black beans,canned,high,9
+1,eggs,protein,medium,12
+1,onion,produce,high,15
+1,carrots,produce,medium,18
+1,frozen peas,produce,medium,21
+1,pasta,grains,high,24
+1,canned tomatoes,canned,high,27
+1,bananas,produce,low,30
+1,soy sauce,spices,medium,33
+2,pasta,grains,high,6
+2,oats,grains,high,9
+2,peanut butter,protein,medium,12
+2,milk,dairy,low,15
+2,canned tomatoes,canned,medium,18
+2,tofu,protein,low,21
+2,garlic,produce,medium,24
+3,rice,grains,high,6
+3,black beans,canned,high,9
+3,onion,produce,medium,12
+3,garlic,produce,medium,15
+3,bell peppers,produce,low,18
+3,ground turkey,protein,medium,21
+3,canned tomatoes,canned,medium,24
+4,rice,grains,high,6
+4,tofu,protein,high,9
+4,broccoli,produce,medium,12
+4,ginger,produce,medium,15
+4,scallions,produce,medium,18
+4,chicken,protein,low,21
+4,soy sauce,spices,high,24
+4,eggs,protein,medium,27
+4,carrots,produce,medium,30
+5,rice,grains,medium,6
+5,potatoes,produce,low,9
+5,canned tomatoes,canned,low,12
+5,eggs,protein,low,15
+5,lentils,grains,medium,18
+6,lentils,grains,high,6
+6,rice,grains,high,9
+6,onion,produce,medium,12
+6,garlic,produce,medium,15
+6,canned tomatoes,canned,high,18
+6,potatoes,produce,medium,21
+6,carrots,produce,medium,24
+6,chicken,protein,medium,27
+7,bananas,produce,medium,6
+7,milk,dairy,medium,9
+7,eggs,protein,medium,12
+7,bell peppers,produce,medium,15
+7,onion,produce,low,18
+7,bread,grains,high,21
+8,rice,grains,high,6
+8,black beans,canned,high,9
+8,onion,produce,high,12
+8,garlic,produce,high,15
+8,canned tomatoes,canned,medium,18
+8,ground turkey,protein,medium,21
+8,bell peppers,produce,medium,24
+9,tofu,protein,medium,6
+9,broccoli,produce,high,9
+9,carrots,produce,high,12
+9,lentils,grains,medium,15
+9,oats,grains,medium,18
+9,potatoes,produce,medium,21
+9,rice,grains,medium,24

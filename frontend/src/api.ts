@@ -1,5 +1,5 @@
 import type {
-  AlertIn, Earned, FoodAlert, Leaderboard, Me, Notice, Pantry, PantryDetail, Recipe, RecipeIn, Rules,
+  AlertIn, Directions, Earned, FoodAlert, Leaderboard, Me, Notice, Pantry, PantryDetail, Recipe, RecipeIn, Rules,
   Suggestion, User,
 } from './types'
 import { mock } from './demo/mock'
@@ -9,8 +9,9 @@ export interface Api {
   users(): Promise<User[]>
   me(): Promise<Me>
   rules(): Promise<Rules>
-  pantries(lat: number, lng: number): Promise<Pantry[]>
-  pantry(id: number, lat: number, lng: number): Promise<PantryDetail>
+  pantries(): Promise<Pantry[]>
+  pantry(id: number): Promise<PantryDetail>
+  directions(pantry_id: number, origin_lat: number, origin_lng: number): Promise<Directions>
   visit(id: number): Promise<Earned>
   ratePantry(id: number, stars: number, comment: string): Promise<Earned>
   updateInventory(id: number, items: { name: string; category: string; level: string }[]): Promise<Earned>
@@ -30,10 +31,14 @@ export interface Api {
 
 const BASE = import.meta.env.VITE_API_URL ?? ''
 
-async function req<T>(path: string, init?: RequestInit): Promise<T> {
+async function req<T>(path: string, init?: RequestInit, includeIdentity = true): Promise<T> {
   const res = await fetch(BASE + path, {
     ...init,
-    headers: { 'Content-Type': 'application/json', 'X-User-Id': String(getUserId()), ...(init?.headers ?? {}) },
+    headers: {
+      'Content-Type': 'application/json',
+      ...(includeIdentity ? { 'X-User-Id': String(getUserId()) } : {}),
+      ...init?.headers,
+    },
   })
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
@@ -50,8 +55,16 @@ const http: Api = {
   users: () => req('/api/users'),
   me: () => req('/api/me'),
   rules: () => req('/api/points/rules'),
-  pantries: (lat, lng) => req('/api/pantries' + qs({ lat, lng })),
-  pantry: (id, lat, lng) => req(`/api/pantries/${id}` + qs({ lat, lng })),
+  // Distance is calculated in the browser; precise visitor coordinates do not enter access-log URLs.
+  pantries: () => req('/api/pantries'),
+  pantry: (id) => req(`/api/pantries/${id}`),
+  // Intentionally anonymous. The backend uses this origin for one request and never stores it.
+  directions: (pantry_id, origin_lat, origin_lng) => req('/api/directions', {
+    ...post({ pantry_id, origin_lat, origin_lng }),
+    cache: 'no-store',
+    credentials: 'omit',
+    headers: { 'Cache-Control': 'no-store' },
+  }, false),
   visit: (id) => req(`/api/pantries/${id}/visit`, { method: 'POST' }),
   ratePantry: (id, stars, comment) => req(`/api/pantries/${id}/rate`, post({ stars, comment })),
   updateInventory: (id, items) => req(`/api/pantries/${id}/inventory`, post({ items })),

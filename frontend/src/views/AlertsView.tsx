@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import BostonMap from '../components/BostonMap'
 import { CULTURES, ago } from '../components/ui'
 import { useApp } from '../context'
+import { coarseAlertLocation } from '../location'
 import type { FoodAlert, Notice } from '../types'
 
 export default function AlertsView() {
@@ -27,8 +28,9 @@ export default function AlertsView() {
     setErr('')
     try {
       const ingredients = custom.split(',').map((s) => s.trim()).filter(Boolean)
+      const [alertLat, alertLng] = coarseAlertLocation(loc[0], loc[1])
       await api.createAlert({
-        dish, culture: culture || null, ingredients: ingredients.length ? ingredients : null, lat: loc[0], lng: loc[1],
+        dish, culture: culture || null, ingredients: ingredients.length ? ingredients : null, lat: alertLat, lng: alertLng,
         radius_km: radius, notify_on: [...(onIng ? ['ingredients' as const] : []), ...(onRecipe ? ['recipe' as const] : [])],
         min_match: minMatch / 100,
       })
@@ -72,6 +74,7 @@ export default function AlertsView() {
             <label className="switch"><input type="checkbox" checked={onRecipe} onChange={(e) => setOnRecipe(e.target.checked)} /> Someone shares a matching recipe</label>
           </fieldset>
           {err && <p className="error">{err}</p>}
+          <p className="muted small">Alerts save only an approximate map area (about 1 km), never your precise device location.</p>
           <button className="btn primary" disabled={!onIng && !onRecipe}>Create alert</button>
         </form>
         <div className="map-card">

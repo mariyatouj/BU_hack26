@@ -108,6 +108,8 @@ main { min-height: 70vh }
 @keyframes pulse { 0% { transform: scale(.6); opacity: .35 } 100% { transform: scale(1.6); opacity: 0 } }
 @media (prefers-reduced-motion: reduce) { .you-halo { animation: none } .pin > g:first-child { transition: none } }
 .map-legend { position: absolute; left: 16px; bottom: 16px; display: flex; flex-wrap: wrap; gap: 14px; padding: 10px 14px; background: var(--card); border-radius: 12px; box-shadow: var(--shadow); font-size: 13px; font-weight: 500; max-width: calc(100% - 32px) }
+.location-action { position: absolute; top: 16px; right: 16px; display: grid; justify-items: end; gap: 5px; padding: 10px; border-radius: 14px; background: var(--card); box-shadow: var(--shadow) }
+.location-action span { max-width: 190px; color: var(--muted); font-size: 11px; text-align: right }
 .dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 6px; vertical-align: -1px }
 .dot.good { background: var(--good) } .dot.mid { background: var(--mid) } .dot.bad { background: var(--bad) }
 .panel { padding: 24px clamp(16px, 2.5vw, 32px) 40px }
@@ -139,6 +141,21 @@ main { min-height: 70vh }
 .stat-strip b { font: 800 26px Archivo, sans-serif }
 .stat-strip span { font-size: 13px; color: var(--muted); line-height: 1.3 }
 .block { padding: 18px 0; border-top: 1px solid var(--line) }
+.privacy-note { margin: -4px 0 16px }
+.call-ahead, .demo-inventory-note { padding: 10px 12px; border-radius: 10px; background: color-mix(in srgb, var(--mid) 12%, var(--surface)); font-size: 14px }
+.demo-inventory-note { margin-top: -4px; color: var(--muted) }
+.transit-card { margin: 12px 0 18px; padding: 16px; border-radius: var(--radius); border: 1.5px solid color-mix(in srgb, var(--brand) 40%, var(--line)); background: color-mix(in srgb, var(--brand) 6%, var(--card)) }
+.transit-card > header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap }
+.transit-card h2, .transit-card header p { margin: 0 }
+.transit-stops { display: grid; gap: 8px; margin: 14px 0 }
+.transit-stops div { display: grid; gap: 2px; padding: 9px 11px; border-radius: 10px; background: var(--card); font-size: 14px }
+.transit-stops span { color: var(--muted) }
+.transit-predictions { list-style: none; display: grid; gap: 7px; margin: 12px 0; padding: 0 }
+.transit-predictions li { display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 9px 11px; border-radius: 10px; background: var(--card) }
+.transit-predictions i { display: grid; place-items: center; min-height: 28px; padding: 3px 6px; border-radius: 6px; font-style: normal; font-weight: 800; font-size: 12px }
+.transit-predictions span { display: grid }
+.transit-predictions small { color: var(--muted) }
+.transit-alert { padding: 9px 11px; border-radius: 10px; background: color-mix(in srgb, var(--bad) 10%, var(--card)); font-size: 14px }
 .hours { list-style: none; padding: 0; margin: 0 0 12px; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px }
 .hours li { display: flex; justify-content: space-between; gap: 8px; padding: 6px 10px; border-radius: 8px; background: var(--surface); font-size: 14px; white-space: nowrap }
 .hours li.today { background: var(--brand); color: var(--brand-ink); font-weight: 700 }
@@ -283,6 +300,7 @@ main { min-height: 70vh }
 }
 @media (max-width: 600px) {
   .map-legend { position: static; border-radius: 0; box-shadow: none; max-width: none }
+  .location-action { top: 10px; right: 10px }
   .map-wrap { aspect-ratio: auto }
   .map-wrap .map { aspect-ratio: 1/1; height: auto }
   .stat-strip b { font-size: 22px }

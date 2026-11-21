@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { connect, type Api } from './api'
 import { Avatar } from './components/ui'
 import { AppCtx, type Ctx, type View } from './context'
+import { haversineKm } from './geo'
 import { setUserId } from './session'
 import type { Earned, Me, Pantry, User } from './types'
 import AlertsView from './views/AlertsView'
@@ -35,12 +36,18 @@ export default function App() {
   const [conn, setConn] = useState<{ api: Api; mode: 'live' | 'demo'; gemini: boolean } | null>(null)
   const [me, setMe] = useState<Me | null>(null)
   const [users, setUsers] = useState<User[]>([])
-  const [pantries, setPantries] = useState<Pantry[]>([])
+  const [pantryRows, setPantryRows] = useState<Pantry[]>([])
   const [view, setView] = useState<View>(fromHash())
   const [focusPantry, setFocusPantry] = useState<number | null>(null)
   const [loc, setLoc] = useState<[number, number]>(BU)
   const [toasts, setToasts] = useState<{ id: number; msg: string; pts?: number }[]>([])
   const [unread, setUnread] = useState(0)
+
+  // Pantry coordinates are public; the visitor's session-only map position stays in the browser.
+  const pantries = useMemo(() => pantryRows.map((p) => ({
+    ...p,
+    distance_km: Math.round(haversineKm(loc[0], loc[1], p.lat, p.lng) * 100) / 100,
+  })).sort((a, b) => a.distance_km - b.distance_km), [pantryRows, loc])
 
   useEffect(() => { connect().then(setConn) }, [])
   useEffect(() => {
@@ -55,7 +62,7 @@ export default function App() {
     setMe(m)
     setUnread(n.filter((x) => !x.read).length)
   }, [conn])
-  const reloadPantries = useCallback(async () => { if (conn) setPantries(await conn.api.pantries(loc[0], loc[1])) }, [conn, loc])
+  const reloadPantries = useCallback(async () => { if (conn) setPantryRows(await conn.api.pantries()) }, [conn])
 
   useEffect(() => { if (conn) { conn.api.users().then(setUsers); refreshMe() } }, [conn, refreshMe])
   useEffect(() => { reloadPantries() }, [reloadPantries])
@@ -102,7 +109,7 @@ export default function App() {
           </label>
         </div>
       </header>
-      {conn!.mode === 'demo' && <p className="demo-note">Demo mode with sample pantries and users — data resets on reload. Run the FastAPI backend for live data.</p>}
+      {conn!.mode === 'demo' && <p className="demo-note">Browser demo mode — pantry directory records are historical public listings; inventory and activity are synthetic and reset on reload.</p>}
       <main>
         {view === 'pantries' && <PantriesView key={focusPantry ?? 0} />}
         {view === 'recipes' && <RecipesView />}
@@ -112,7 +119,7 @@ export default function App() {
       </main>
       <footer className="foot">
         <span>Pantry Pass · BostonHacks 2026 · Boundless Boston track</span>
-        <span className="muted">Pantry listings are sample data for the prototype.</span>
+        <span className="muted">Historical public pantry directory · Demo inventory · Call ahead before visiting.</span>
       </footer>
       <div className="toasts" aria-live="polite">
         {toasts.map((t) => <div key={t.id} className="toast">{t.pts ? <b>+{t.pts} pts</b> : null}<span>{t.msg}</span></div>)}

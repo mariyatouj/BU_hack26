@@ -27,6 +27,7 @@ class Pantry(Base):
     name: Mapped[str] = mapped_column(String(120))
     address: Mapped[str] = mapped_column(String(200))
     neighborhood: Mapped[str] = mapped_column(String(60))
+    phone: Mapped[str | None] = mapped_column(String(30), nullable=True)
     lat: Mapped[float] = mapped_column(Float)
     lng: Mapped[float] = mapped_column(Float)
     # client-choice | pre-packed | mobile | drive-thru
@@ -36,6 +37,8 @@ class Pantry(Base):
     # ["Fresh produce", "Halal", "No ID required", ...]
     features: Mapped[list] = mapped_column(JSON, default=list)
     inventory_level: Mapped[str] = mapped_column(String(10), default="medium")  # low | medium | high
+    source_name: Mapped[str | None] = mapped_column(String(160), nullable=True)
+    source_url: Mapped[str | None] = mapped_column(Text, nullable=True)
     verified: Mapped[bool] = mapped_column(Boolean, default=True)
     submitted_by: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
@@ -53,6 +56,8 @@ class InventoryItem(Base):
     name: Mapped[str] = mapped_column(String(80))
     category: Mapped[str] = mapped_column(String(40))  # produce, grains, protein, canned, dairy, spices
     level: Mapped[str] = mapped_column(String(10), default="medium")  # out | low | medium | high
+    # demo | community | pantry | partner. Demo rows are always disclosed in the API/UI.
+    source: Mapped[str] = mapped_column(String(20), default="community")
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, index=True)
 
     pantry: Mapped[Pantry] = relationship(back_populates="items")

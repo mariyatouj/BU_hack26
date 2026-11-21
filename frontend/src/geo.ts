@@ -13,6 +13,16 @@ export const unproject = (x: number, y: number): [number, number] => [
 ]
 export const kmToPx = (km: number) => (km / (111.32 * Math.cos((42.34 * Math.PI) / 180))) / (BOUNDS.east - BOUNDS.west) * W
 
+/** Great-circle distance used client-side so a visitor's location never needs to be sent just to sort pantries. */
+export const haversineKm = (lat1: number, lng1: number, lat2: number, lng2: number) => {
+  const rad = (degrees: number) => (degrees * Math.PI) / 180
+  const dLat = rad(lat2 - lat1)
+  const dLng = rad(lng2 - lng1)
+  const a = Math.sin(dLat / 2) ** 2
+    + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLng / 2) ** 2
+  return 2 * 6371 * Math.asin(Math.sqrt(a))
+}
+
 const path = (pts: [number, number][]) => pts.map(([lat, lng], i) => `${i ? 'L' : 'M'}${project(lat, lng).map((v) => v.toFixed(1)).join(',')}`).join('')
 
 // Stylized geography (approximate, for orientation only)

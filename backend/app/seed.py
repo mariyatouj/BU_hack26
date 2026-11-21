@@ -1,5 +1,7 @@
-"""Load data/seed.json into an empty database.  Run:  python -m app.seed  (from backend/)"""
+"""Load directory/demo data into an empty database. Run: python -m app.seed (from backend/)."""
+import csv
 import json
+from collections import defaultdict
 from datetime import timedelta
 from pathlib import Path
 
@@ -13,6 +15,7 @@ from .models import (Alert, InventoryItem, Pantry, PantryRating, PointEvent, Rec
 from .points import POINTS
 
 SEED_PATH = Path(__file__).resolve().parents[2] / "data" / "seed.json"
+DEMO_INVENTORY_PATH = Path(__file__).resolve().parents[2] / "data" / "demo_inventory.csv"
 
 
 def seed(db: Session) -> bool:
@@ -20,6 +23,10 @@ def seed(db: Session) -> bool:
         return False
     data = json.loads(SEED_PATH.read_text())
     now = utcnow()
+    inventory: dict[int, list[dict]] = defaultdict(list)
+    with DEMO_INVENTORY_PATH.open(newline="") as f:
+        for row in csv.DictReader(f):
+            inventory[int(row["pantry_id"])].append(row)
     users = {}
     for u in data["users"]:
         users[u["id"]] = User(**u, points=0)
@@ -33,13 +40,18 @@ def seed(db: Session) -> bool:
         users[uid].points += pts
 
     for p in data["pantries"]:
-        items = p.pop("items")
         pantry = Pantry(**p)
         db.add(pantry)
         db.flush()
-        for i, (name, cat, level) in enumerate(items):
-            db.add(InventoryItem(pantry_id=pantry.id, name=name, category=cat, level=level,
-                                 updated_at=now - timedelta(hours=6 + i * 3 + pantry.id * 5)))
+        for item in inventory[pantry.id]:
+            db.add(InventoryItem(
+                pantry_id=pantry.id,
+                name=item["name"],
+                category=item["category"],
+                level=item["level"],
+                source="demo",
+                updated_at=now - timedelta(hours=int(item["hours_ago"])),
+            ))
 
     for r in data["recipes"]:
         ratings = r.pop("ratings")
