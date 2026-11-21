@@ -1,8 +1,11 @@
 import { useRef } from 'react'
-import { EASTIE, H, HARBOR, NEIGHBORHOODS, RIVER, T_LINES, W, kmToPx, linePath, project, unproject } from '../geo'
+import { EASTIE, H, HARBOR, NEIGHBORHOODS, RIVER, W, kmToPx, project, unproject } from '../geo'
 import type { Pantry } from '../types'
+import TransitLayer from './TransitLayer'
+import { illustrativeRoutes } from './illustrativeTransit'
 
 interface Props {
+  fit?: 'slice' | 'meet'
   pantries: Pantry[]
   selectedId?: number | null
   onSelect?: (id: number) => void
@@ -14,7 +17,7 @@ interface Props {
 
 const LEVEL_COLOR: Record<string, string> = { high: 'var(--good)', medium: 'var(--mid)', low: 'var(--bad)' }
 
-export default function BostonMap({ pantries, selectedId, onSelect, you, onMoveYou, radiusKm, dimIds }: Props) {
+export default function BostonMap({ fit = 'slice', pantries, selectedId, onSelect, you, onMoveYou, radiusKm, dimIds }: Props) {
   const svg = useRef<SVGSVGElement>(null)
   const [yx, yy] = project(you[0], you[1])
 
@@ -25,13 +28,14 @@ export default function BostonMap({ pantries, selectedId, onSelect, you, onMoveY
     pt.x = e.clientX
     pt.y = e.clientY
     const p = pt.matrixTransform(svg.current.getScreenCTM()!.inverse())
+    if (p.x < 0 || p.x > W || p.y < 0 || p.y > H) return
     const [lat, lng] = unproject(p.x, p.y)
     onMoveYou(lat, lng)
   }
 
   return (
     <svg ref={svg} className="map" viewBox={`0 0 ${W} ${H}`} onClick={handleClick} role="img"
-      aria-label="Map of Boston food pantries" preserveAspectRatio="xMidYMid slice">
+      aria-label="Map of Boston food pantries" preserveAspectRatio={`xMidYMid ${fit}`}>
       <defs>
         <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
           <path d="M40 0H0V40" fill="none" stroke="var(--map-grid)" strokeWidth="1" />
@@ -49,15 +53,7 @@ export default function BostonMap({ pantries, selectedId, onSelect, you, onMoveY
         const [x, y] = project(lat, lng)
         return <text key={name} x={x} y={y} className="map-hood" textAnchor="middle">{name}</text>
       })}
-      {T_LINES.map((l) => (
-        <g key={l.name}>
-          <path d={linePath(l.stops)} fill="none" stroke={l.color} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" opacity=".85" />
-          {l.stops.map(([s, lat, lng]) => {
-            const [x, y] = project(lat, lng)
-            return <circle key={s} cx={x} cy={y} r="4.5" fill="var(--map-land)" stroke={l.color} strokeWidth="2.5"><title>{s}</title></circle>
-          })}
-        </g>
-      ))}
+      <TransitLayer routes={illustrativeRoutes} />
       {radiusKm ? <circle cx={yx} cy={yy} r={kmToPx(radiusKm)} className="map-radius" /> : null}
       {pantries.map((p) => {
         const [x, y] = project(p.lat, p.lng)

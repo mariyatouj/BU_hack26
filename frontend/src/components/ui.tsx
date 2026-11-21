@@ -85,7 +85,7 @@ export const ACTION_LABEL: Record<string, string> = {
 
 export const CULTURES = ['Chinese', 'Latin American', 'South Asian', 'Middle Eastern', 'American', 'Italian', 'Irish', 'Korean', 'Vietnamese', 'Caribbean', 'West African']
 export const DIETS = ['Vegetarian', 'Vegan', 'Halal', 'Kosher', 'Gluten free', 'Dairy free', 'Nut free']
-export const LINE_COLOR: Record<string, string> = { Red: '#da291c', Green: '#00843d', Orange: '#ed8b00', Blue: '#003da5', Silver: '#7c878e' }
+export const LINE_COLOR: Record<string, string> = { Red: '#da291c', Green: '#00843d', Orange: '#ed8b00', Blue: '#003da5', Silver: '#7c878e', 'Commuter Rail': '#80276c' }
 
 export function Avatar({ name, line, size = 36 }: { name: string; line?: string | null; size?: number }) {
   const initials = name.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase()

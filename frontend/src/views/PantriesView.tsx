@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import BostonMap from '../components/BostonMap'
+import PantrySheet, { type SheetPosition } from '../components/PantrySheet'
 import { Chips, DIETS, CULTURES, LEVEL_LABEL, Modal, Stars, StockBar, ago } from '../components/ui'
 import { useApp } from '../context'
 import { haversineKm } from '../geo'
@@ -27,14 +28,40 @@ function openToday(p: Pantry) {
 const hasVerifiedHours = (p: Pantry) => Object.keys(p.hours).length > 0
 
 export default function PantriesView() {
-  const { pantries, loc, setLoc, focusPantry, toast } = useApp()
+  const { api, pantries, loc, setLoc, focusPantry, toast } = useApp()
   const [sel, setSel] = useState<number | null>(focusPantry)
+  const [position, setPosition] = useState<SheetPosition>('half')
+  const [dishesByPantry, setDishesByPantry] = useState<Map<number, string[]>>(new Map())
+  const [recipeVersion, setRecipeVersion] = useState(0)
   const [feature, setFeature] = useState<string[]>([])
   const [model, setModel] = useState<string[]>([])
   const [todayOnly, setTodayOnly] = useState(false)
   const [locating, setLocating] = useState(false)
 
-  useEffect(() => { if (focusPantry) setSel(focusPantry) }, [focusPantry])
+  const selectPantry = (id: number) => {
+    setSel(id)
+    setPosition((current) => current === 'collapsed' ? 'half' : current)
+  }
+
+  useEffect(() => {
+    let active = true
+    api.recipes({ sort: 'top' }).then((recipes) => {
+      if (!active) return
+      const grouped = new Map<number, string[]>()
+      for (const recipe of recipes) {
+        if (!recipe.pantry) continue
+        const titles = grouped.get(recipe.pantry.id) ?? []
+        if (titles.length < 2) {
+          titles.push(recipe.title)
+          grouped.set(recipe.pantry.id, titles)
+        }
+      }
+      setDishesByPantry(grouped)
+    }).catch(() => {
+      if (active) setDishesByPantry(new Map())
+    })
+    return () => { active = false }
+  }, [api, recipeVersion])
 
   const features = useMemo(() => [...new Set(pantries.flatMap((p) => p.features))].sort(), [pantries])
   const shown = pantries.filter((p) =>
@@ -55,40 +82,43 @@ export default function PantriesView() {
   }
 
   return (
-    <div className="split">
-      <section className="map-wrap">
-        <BostonMap pantries={pantries} selectedId={sel} onSelect={setSel} you={loc} onMoveYou={(a, b) => setLoc([a, b])} dimIds={dim} />
-        <div className="location-action">
-          <button className="btn small primary" onClick={useMyLocation} disabled={locating}>
-            {locating ? 'Finding you…' : 'Use my location'}
-          </button>
-          <span>Used in this tab only · not saved</span>
-        </div>
-        <div className="map-legend">
-          <span><i className="dot good" />Plenty</span><span><i className="dot mid" />Some</span><span><i className="dot bad" />Running low</span>
-          <span className="muted">Tap the map to move your location</span>
+    <div className="pantry-explorer">
+      <section className="explorer-map" aria-label="Pantry map">
+        <BostonMap fit="meet" pantries={pantries} selectedId={sel} onSelect={selectPantry} you={loc} onMoveYou={(a, b) => setLoc([a, b])} dimIds={dim} />
+        <div className="explorer-map-tools">
+          <div className="location-action">
+            <button className="btn small primary" onClick={useMyLocation} disabled={locating}>
+              {locating ? 'Finding you…' : 'Use my location'}
+            </button>
+            <span>Used in this tab only · not saved</span>
+          </div>
+          <div className="map-legend">
+            <span><i className="dot good" />Plenty</span><span><i className="dot mid" />Some</span><span><i className="dot bad" />Running low</span>
+            <span className="muted">Illustrative transit routes</span>
+            <span className="muted">Tap the map to move your location</span>
+          </div>
         </div>
       </section>
-      <section className="panel">
-        {sel ? <Detail id={sel} onBack={() => setSel(null)} /> : (
+      <PantrySheet position={position} onPositionChange={setPosition} count={shown.length} total={pantries.length}>
+        {sel ? (
+          <Detail id={sel} onBack={() => setSel(null)} onRecipeShared={() => setRecipeVersion((version) => version + 1)} />
+        ) : (
           <>
-            <div className="panel-head">
-              <h1>Pantries near you</h1>
-              <p className="muted">{shown.length} of {pantries.length} pantries · sorted by distance</p>
-              <p className="muted small">Locations are historical public directory records; colored stock levels are demo values. <a href="https://www.gbfb.org/need-food/" target="_blank" rel="noreferrer">Check the current GBFB locator ↗</a></p>
-            </div>
-            <div className="filters">
-              <label className="switch"><input type="checkbox" checked={todayOnly} onChange={(e) => setTodayOnly(e.target.checked)} /> Open today</label>
-              <Chips options={Object.keys(MODEL_LABEL).map((k) => SHORT[k])} value={model.map((k) => SHORT[k])} onChange={(v) => setModel(v.map((l) => Object.keys(SHORT).find((k) => SHORT[k] === l)!))} />
-              <details>
-                <summary>Features {feature.length ? `(${feature.length})` : ''}</summary>
-                <Chips options={features} value={feature} onChange={setFeature} multi />
-              </details>
-            </div>
+            <details className="sheet-filters">
+              <summary>Filters <span className="muted small">· Sorted by distance</span></summary>
+              <div className="filters">
+                <label className="switch"><input type="checkbox" checked={todayOnly} onChange={(e) => setTodayOnly(e.target.checked)} /> Open today</label>
+                <Chips options={Object.keys(MODEL_LABEL).map((k) => SHORT[k])} value={model.map((k) => SHORT[k])} onChange={(v) => setModel(v.map((l) => Object.keys(SHORT).find((k) => SHORT[k] === l)!))} />
+                <details>
+                  <summary>Features {feature.length ? `(${feature.length})` : ''}</summary>
+                  <Chips options={features} value={feature} onChange={setFeature} multi />
+                </details>
+              </div>
+            </details>
             <ul className="plist">
               {shown.map((p) => (
                 <li key={p.id}>
-                  <button className="pcard" onClick={() => setSel(p.id)}>
+                  <button className="pcard" onClick={() => selectPantry(p.id)}>
                     <span className={`lvl ${p.inventory_level}`} aria-label={`Inventory ${p.inventory_level}`} />
                     <span className="pcard-main">
                       <strong>{p.name}</strong>
@@ -99,6 +129,9 @@ export default function PantriesView() {
                           {openToday(p) ? `Open today ${openToday(p)}` : hasVerifiedHours(p) ? 'Closed today' : 'Hours not verified — call ahead'}
                         </span>
                       </span>
+                      {dishesByPantry.get(p.id)?.length ? (
+                        <span className="pcard-dishes"><strong>Community dishes</strong> {dishesByPantry.get(p.id)?.join(' · ')}</span>
+                      ) : null}
                     </span>
                     <span className="pcard-dist">{p.distance_km?.toFixed(1) ?? '–'}<small> km</small></span>
                   </button>
@@ -106,15 +139,16 @@ export default function PantriesView() {
               ))}
               {!shown.length && <li className="empty">No pantries match these filters.</li>}
             </ul>
+            <p className="muted small directory-note">Locations are historical public directory records; colored stock levels are demo values. <a href="https://www.gbfb.org/need-food/" target="_blank" rel="noreferrer">Check the current GBFB locator ↗</a></p>
             <SubmitPantry />
           </>
         )}
-      </section>
+      </PantrySheet>
     </div>
   )
 }
 
-function Detail({ id, onBack }: { id: number; onBack: () => void }) {
+function Detail({ id, onBack, onRecipeShared }: { id: number; onBack: () => void; onRecipeShared: () => void }) {
   const { api, loc, celebrate, toast, reloadPantries, gemini, mode } = useApp()
   const [p, setP] = useState<PantryDetail | null>(null)
   const [rating, setRating] = useState(false)
@@ -131,7 +165,7 @@ function Detail({ id, onBack }: { id: number; onBack: () => void }) {
   const load = () => api.pantry(id).then(setP)
   useEffect(() => { setSug(null); load() }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!p) return <div className="panel-head"><p className="muted">Loading…</p></div>
+  if (!p) return <p className="muted">Loading…</p>
   const today = DAYS[new Date().getDay()]
   const byCat = p.items.reduce<Record<string, typeof p.items>>((a, i) => ((a[i.category] ??= []).push(i), a), {})
 
@@ -290,7 +324,7 @@ function Detail({ id, onBack }: { id: number; onBack: () => void }) {
 
       {rating && <RatePantry id={p.id} onDone={() => { setRating(false); load(); reloadPantries() }} />}
       {stock && <ReportStock p={p} onDone={() => { setStock(false); load(); reloadPantries() }} />}
-      {share && <ShareRecipe initial={share} onClose={() => setShare(null)} onShared={() => { setShare(null); load() }} />}
+      {share && <ShareRecipe initial={share} onClose={() => setShare(null)} onShared={() => { setShare(null); load(); onRecipeShared() }} />}
     </div>
   )
 }

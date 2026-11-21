@@ -59,7 +59,7 @@ export default function RecipesView() {
   )
 }
 
-const PLATE = ['#f4c95d', '#e5482b', '#7bb662', '#f08a4b', '#c9a46b', '#9a6fb0']
+const PLATE = ['#f4c95d', '#F76363', '#7bb662', '#F19525', '#CAE6BC', '#9a6fb0']
 function Plate({ seed }: { seed: number }) {
   const c = (i: number) => PLATE[(seed + i) % PLATE.length]
   return (
@@ -69,6 +69,8 @@ function Plate({ seed }: { seed: number }) {
       <ellipse cx="100" cy="68" rx="54" ry="32" fill="var(--plate-rim)" />
       <circle cx="84" cy="64" r="15" fill={c(0)} /><circle cx="110" cy="58" r="12" fill={c(1)} />
       <circle cx="116" cy="78" r="13" fill={c(2)} /><circle cx="92" cy="82" r="9" fill={c(3)} />
+      <path d="M122 61c2-9 11-12 18-10-3 8-9 13-18 10Zm-45 16c-9 0-14-5-15-12 8-1 15 4 15 12Z" fill="#408052" />
+      <path d="M82 61l4 2m26 11 4 2m-22 6 3-2" fill="none" stroke="#fff" strokeOpacity=".75" strokeWidth="2" strokeLinecap="round" />
     </svg>
   )
 }

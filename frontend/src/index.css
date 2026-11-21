@@ -3,8 +3,25 @@
   IDEA: a transit map crossed with a pantry shelf tag; pins are shelf-stock dots on the T map.
   PICTURE: the hand-drawn Boston map with T lines, river and harbor, carrying every pantry.
   COLOUR and TYPE: white ground, deep leaf ink, pantry green lead, tomato accent; Archivo + Inter.
-  LAYOUT: map left / panel right on desktop; stacked title, map, list under 900px.
+  LAYOUT: map canvas with an overlay sheet, beside the navigation sidebar.
 */
+/* ChiKareGo2 and FindersKeepers by Giles Booth, Creative Commons Attribution.
+   Source and license notices are in assets/fonts/system-css/ATTRIBUTION.txt. */
+@font-face {
+  font-family: ChiKareGo2;
+  src: url('./assets/fonts/system-css/ChiKareGo2.woff2?inline') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: FindersKeepers;
+  src: url('./assets/fonts/system-css/FindersKeepers.woff2?inline') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 :root {
   color-scheme: light dark;
   --bg: light-dark(#ffffff, #0f1712);
@@ -34,8 +51,9 @@
 * { box-sizing: border-box; min-width: 0 }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 Inter, system-ui, sans-serif; overflow-x: clip }
 h1, h2, h3 { font-family: Archivo, Inter, sans-serif; font-stretch: 110%; line-height: 1.1; margin: 0 0 .4em; text-wrap: balance }
-h1 { font-size: clamp(28px, 3.4vw, 40px); font-weight: 800 }
-h2 { font-size: 20px; font-weight: 700 }
+h1 { font-size: clamp(28px, 3.4vw, 40px) }
+h1, h2 { font-family: ChiKareGo2, Archivo, Inter, sans-serif; font-weight: 400; font-stretch: normal }
+h2 { font-size: 22px }
 h3 { font-size: 16px; font-weight: 700 }
 p { margin: 0 0 .7em }
 a { color: var(--brand) }
@@ -76,16 +94,10 @@ input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--brand) }
 .stars.edit svg { width: 28px; height: 28px }
 .avatar { display: inline-grid; place-items: center; border-radius: 50%; color: #fff; font-weight: 700; flex: none; font-family: Archivo, sans-serif }
 
-/* header */
-.top { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; padding: 10px max(3vw, 16px); background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line) }
-.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font: 800 19px/1 Archivo, sans-serif; font-stretch: 112% }
+/* navigation */
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font: 400 20px/1 ChiKareGo2, Archivo, sans-serif }
 .brand small { display: block; font: 500 12px Inter, sans-serif; color: var(--muted); margin-top: 3px }
-nav { display: flex; gap: 2px; flex: 1 }
-nav a { flex: none; position: relative; padding: 10px 14px; border-radius: 999px; text-decoration: none; color: var(--ink); font-weight: 600; white-space: nowrap }
-nav a:hover { background: var(--surface) }
-nav a.on { background: var(--ink); color: var(--bg) }
 .count { margin-left: 6px; background: var(--accent); color: #fff; font-size: 12px; padding: 1px 7px; border-radius: 999px }
-.who-am-i { display: flex; align-items: center; gap: 10px }
 .pts-pill { padding: 8px 14px; border-radius: 999px; background: var(--brand); color: var(--brand-ink); text-decoration: none; white-space: nowrap }
 .user-switch { display: flex; align-items: center; gap: 6px }
 .user-switch select { width: auto; min-height: 38px; padding: 6px 8px; border-radius: 999px }
@@ -94,9 +106,7 @@ main { min-height: 70vh }
 .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 24px max(3vw, 16px); border-top: 1px solid var(--line); font-size: 14px; margin-top: 40px }
 .boot { display: grid; place-items: center; height: 100vh; gap: 12px; align-content: center; color: var(--muted) }
 
-/* pantries split */
-.split { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); min-height: calc(100vh - 64px) }
-.map-wrap { position: sticky; top: 64px; height: calc(100vh - 64px); background: var(--map-land); border-right: 1px solid var(--line) }
+/* pantry map */
 .map { display: block; width: 100%; height: 100%; cursor: crosshair; user-select: none }
 .map-hood { font: 600 15px Archivo, sans-serif; fill: var(--muted); opacity: .75; letter-spacing: .02em; pointer-events: none }
 .map-radius { fill: color-mix(in srgb, var(--brand) 12%, transparent); stroke: var(--brand); stroke-width: 2.5; stroke-dasharray: 8 6 }
@@ -108,12 +118,10 @@ main { min-height: 70vh }
 @keyframes pulse { 0% { transform: scale(.6); opacity: .35 } 100% { transform: scale(1.6); opacity: 0 } }
 @media (prefers-reduced-motion: reduce) { .you-halo { animation: none } .pin > g:first-child { transition: none } }
 .map-legend { position: absolute; left: 16px; bottom: 16px; display: flex; flex-wrap: wrap; gap: 14px; padding: 10px 14px; background: var(--card); border-radius: 12px; box-shadow: var(--shadow); font-size: 13px; font-weight: 500; max-width: calc(100% - 32px) }
-.location-action { position: absolute; top: 16px; right: 16px; display: grid; justify-items: end; gap: 5px; padding: 10px; border-radius: 14px; background: var(--card); box-shadow: var(--shadow) }
+.location-action { display: grid; justify-items: end; margin-left: auto; pointer-events: auto; gap: 5px; padding: 10px; border-radius: 14px; background: var(--card); box-shadow: var(--shadow) }
 .location-action span { max-width: 190px; color: var(--muted); font-size: 11px; text-align: right }
 .dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 6px; vertical-align: -1px }
 .dot.good { background: var(--good) } .dot.mid { background: var(--mid) } .dot.bad { background: var(--bad) }
-.panel { padding: 24px clamp(16px, 2.5vw, 32px) 40px }
-.panel-head { margin-bottom: 14px }
 .filters { display: grid; gap: 10px; margin-bottom: 16px }
 .filters details summary { cursor: pointer; font-weight: 600; min-height: 36px; padding-top: 6px }
 .filters details[open] summary { margin-bottom: 8px }
@@ -291,22 +299,157 @@ main { min-height: 70vh }
 @keyframes up { from { transform: translateY(10px); opacity: 0 } }
 
 @media (max-width: 1000px) {
-  .top { flex-wrap: wrap; gap: 10px }
-  nav { order: 3; flex-basis: 100%; overflow-x: auto }
-  .who-am-i { margin-left: auto }
-  .split { grid-template-columns: minmax(0, 1fr) }
-  .map-wrap { position: relative; top: 0; height: auto; aspect-ratio: 1/1; border-right: 0 }
   .lb-grid, .alerts-grid, .recipe, .me-card, .form.two { grid-template-columns: minmax(0, 1fr) }
 }
 @media (max-width: 600px) {
-  .map-legend { position: static; border-radius: 0; box-shadow: none; max-width: none }
-  .location-action { top: 10px; right: 10px }
-  .map-wrap { aspect-ratio: auto }
-  .map-wrap .map { aspect-ratio: 1/1; height: auto }
   .stat-strip b { font-size: 22px }
   .pcard-dist { font-size: 20px }
   .board li { grid-template-columns: 30px 40px minmax(0, 1fr) auto; padding: 10px 12px; gap: 4px 10px }
   .matches li { grid-template-columns: minmax(0, 1fr) 50px 44px; }
   .matches li .meter { display: none }
-  .brand span small { display: none }
+}
+
+
+/* Application shell */
+.app-shell {
+  display: grid;
+  grid-template-columns: 228px minmax(0, 1fr);
+  min-height: 100dvh;
+}
+.app-shell.sidebar-collapsed { grid-template-columns: 72px minmax(0, 1fr) }
+.sidebar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  height: 100dvh;
+  overflow-y: auto;
+  padding: 18px 12px;
+  background: var(--card);
+  border-right: 1px solid var(--line);
+}
+.sidebar .brand { min-height: 44px; padding-inline: 5px }
+.brand-icon, .nav-icon, .charlie-brand img { flex: none; object-fit: contain }
+.charlie-brand { display: inline-flex; align-items: center; gap: 8px }
+.sidebar nav { display: grid; gap: 5px }
+.sidebar nav a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--ink);
+  font: 400 18px/1.15 FindersKeepers, Inter, sans-serif;
+}
+.sidebar nav a:hover { background: var(--surface) }
+.sidebar nav a.on { background: var(--ink); color: var(--bg) }
+.sidebar nav .count { margin-left: auto }
+.sidebar-toggle { justify-content: center }
+.sidebar-profile {
+  display: grid;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.sidebar-profile .user-switch select { flex: 1; min-width: 0 }
+.sidebar-profile .pts-pill { text-align: center }
+.drawer-toggle, .drawer-scrim { display: none }
+
+@media (min-width: 701px) {
+  .sidebar-collapsed .sidebar-label, .sidebar-collapsed .sidebar-profile { display: none }
+  .sidebar-collapsed .sidebar .brand, .sidebar-collapsed .sidebar nav a { justify-content: center; padding-inline: 0 }
+  .sidebar-collapsed .sidebar nav .count { position: absolute; top: 1px; right: 0; padding: 0 5px }
+}
+
+@media (max-width: 700px) {
+  .app-shell, .app-shell.sidebar-collapsed { display: block }
+  .app-content { padding-top: 56px }
+  .drawer-toggle { display: inline-flex; position: fixed; z-index: 31; top: 6px; left: 12px }
+  .drawer-scrim { display: block; position: fixed; inset: 0; z-index: 29; background: rgb(10 22 15 / .30) }
+  .sidebar {
+    display: none;
+    position: fixed;
+    z-index: 30;
+    inset: 0 auto 0 0;
+    width: min(280px, 85vw);
+    padding-top: 58px;
+  }
+  .drawer-open .sidebar { display: flex }
+  .sidebar-toggle { display: none }
+}
+
+/* The sheet overlays the map and keeps its own scroll area. */
+.map-content { display: flex; flex-direction: column; height: 100dvh }
+.map-content main { flex: 1; min-height: 0; display: grid }
+.pantry-explorer { position: relative; overflow: hidden; background: var(--map-land) }
+.explorer-map { position: absolute; inset: 0 }
+.explorer-map-tools {
+  position: absolute;
+  inset: 12px 12px auto;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  pointer-events: none;
+}
+.explorer-map .map-legend {
+  position: static;
+  max-width: 100%;
+  gap: 4px 12px;
+}
+.directory-note { margin: 12px 0 0 }
+.pantry-sheet {
+  --sheet-full: calc(100% - 16px);
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 720px);
+  max-height: var(--sheet-full);
+  margin-inline: auto;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 -4px 24px rgb(0 0 0 / .10);
+}
+.pantry-sheet[data-position=half] { height: 53%; min-height: min(260px, 56%) }
+.pantry-sheet[data-position=full] { height: var(--sheet-full) }
+.sheet-head { flex: none; border-bottom: 1px solid var(--line) }
+.sheet-handle {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 18px 18px 0 0;
+  background: transparent;
+  cursor: ns-resize;
+  touch-action: none;
+}
+.sheet-handle span { width: 44px; height: 5px; border-radius: 8px; background: var(--muted) }
+.sheet-title, .sheet-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; padding: 0 16px 8px }
+.sheet-title h1 { margin: 0; font-size: clamp(18px, 2.6vw, 25px); letter-spacing: -.02em }
+.sheet-controls .btn { font: 400 16px/1.15 FindersKeepers, Inter, sans-serif }
+.sheet-controls .btn[aria-pressed=true] { border-color: var(--brand); background: var(--surface); color: var(--brand) }
+.sheet-results { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 10px 16px 20px }
+.sheet-filters { margin-bottom: 8px }
+.sheet-filters > summary { cursor: pointer; padding: 4px 0; font-weight: 600 }
+.sheet-filters .filters { margin-top: 8px }
+.pantry-sheet .pcard { padding-block: 9px }
+.pcard-dishes { margin-top: 3px; font-size: 13px }
+.pcard-dishes strong { color: var(--brand); margin-right: 4px }
+
+@media (max-width: 480px) {
+  .sheet-title, .sheet-controls, .sheet-results { padding-inline: 12px }
+  .sheet-controls { gap: 4px }
+  .sheet-controls .btn { padding-inline: 9px }
+  .explorer-map .map-legend { font-size: 12px; padding: 6px 8px }
 }

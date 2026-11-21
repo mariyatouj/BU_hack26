@@ -79,7 +79,7 @@ export default function AlertsView() {
         </form>
         <div className="map-card">
           <BostonMap pantries={pantries} you={loc} onMoveYou={(a, b) => setLoc([a, b])} radiusKm={radius} />
-          <p className="muted small">The circle is your search area. Tap the map to move its center.</p>
+          <p className="muted small">The circle is your search area. Tap the map to move its center. Transit routes are illustrative.</p>
         </div>
       </div>
 
