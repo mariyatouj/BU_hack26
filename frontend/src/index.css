@@ -19,45 +19,45 @@
   --font-body: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'DM Serif Text', Georgia, serif;
 
-  /* Warm Gastronomic Canvas */
-  --bg: light-dark(#fcfaf6, #181513);
-  --card: light-dark(#ffffff, #221e1a);
-  --card-elevated: light-dark(#ffffff, #2a2521);
-  --ink: light-dark(#271c18, #f5efe9);
-  --muted: light-dark(#6e5c54, #bcaaa0);
-  --line: light-dark(#ebdcd0, #3e342e);
-  --line-strong: light-dark(#d5beae, #5a4b43);
-  --surface: light-dark(#f7f1e8, #2a241f);
+  /* Warm Linen & Buttermilk Canvas (Comfortable, Organic & Gentle on Eyes) */
+  --bg: light-dark(#f7f4ed, #141618);
+  --card: light-dark(#fefdfa, #1d2024);
+  --card-elevated: light-dark(#ffffff, #24282e);
+  --ink: light-dark(#241d18, #f4f2ee);
+  --muted: light-dark(#675e55, #a49c93);
+  --line: light-dark(#e2ddd3, #32373e);
+  --line-strong: light-dark(#c7bfb2, #4b525c);
+  --surface: light-dark(#eee9df, #25292f);
   
-  /* Fresh Herb & Produce Green (Vibrant Harvest) */
-  --fresh: light-dark(#eaf5e6, #1e3a1f);
-  --fresh-ink: light-dark(#1f6629, #9eeaa6);
-  --fresh-border: light-dark(#c2e6be, #2f5630);
+  /* Fresh Herb / Garden Green */
+  --fresh: light-dark(#e7f1e2, #1b321e);
+  --fresh-ink: light-dark(#1f6126, #8ee09b);
+  --fresh-border: light-dark(#bedcb7, #2c522f);
 
-  /* Warm Terracotta & Roasted Tomato (Appetite Stimulating) */
-  --brand: light-dark(#cf3a27, #ff7a66);
-  --brand-hover: light-dark(#b32e1c, #ff9280);
-  --brand-ink: light-dark(#ffffff, #2c0e09);
-  --blush: light-dark(#faede7, #44221c);
+  /* Warm Boston Terracotta / Brick Red */
+  --brand: light-dark(#ba3828, #f87168);
+  --brand-hover: light-dark(#9e2d1f, #fa8b84);
+  --brand-ink: light-dark(#ffffff, #260906);
+  --blush: light-dark(#faece4, #3b211c);
   
-  /* Golden Honey & Saffron (Points, Badges, Highlights) */
-  --amber: light-dark(#d97706, #fbbf24);
-  --amber-bg: light-dark(#fef3c7, #3d280c);
-  --amber-ink: light-dark(#92400e, #fde68a);
-  --amber-border: light-dark(#fde68a, #573a11);
+  /* Warm Honey / Golden Amber (Points, Vouchers) */
+  --amber: light-dark(#b45309, #fbbf24);
+  --amber-bg: light-dark(#fdf2d7, #34260e);
+  --amber-ink: light-dark(#78370b, #fde68a);
+  --amber-border: light-dark(#fde2a6, #503914);
   
-  --focus: light-dark(#cf3a27, #ff7a66);
-  --map-land: light-dark(#f3ede4, #26211c);
-  --map-water: light-dark(#d7e7eb, #253942);
-  --radius: 14px;
+  --focus: light-dark(#ba3828, #f87168);
+  --map-land: light-dark(#ece6dc, #24292e);
+  --map-water: light-dark(#d1e3e8, #233740);
+  --radius: 12px;
   --radius-sm: 8px;
   --radius-pill: 9999px;
 
-  /* Depth & Elevation */
-  --shadow-sm: 0 1px 3px rgba(45, 25, 15, 0.05);
-  --shadow-md: 0 4px 16px rgba(45, 25, 15, 0.07);
-  --shadow-lg: 0 8px 28px rgba(45, 25, 15, 0.1);
-  --transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Subtle Warm Elevation */
+  --shadow-sm: 0 1px 3px rgba(36, 29, 24, 0.05);
+  --shadow-md: 0 3px 12px rgba(36, 29, 24, 0.07);
+  --shadow-lg: 0 6px 20px rgba(36, 29, 24, 0.09);
+  --transition: all 0.16s ease-out;
 }
 
 * {
@@ -69,7 +69,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font: 16px/1.55 var(--font-body);
-  letter-spacing: -0.011em;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -98,9 +98,8 @@ h2 {
 }
 
 h3 {
-  font-size: 1.08rem;
+  font-size: 1.06rem;
   font-weight: 700;
-  letter-spacing: -0.015em;
 }
 
 p {
@@ -110,7 +109,7 @@ p {
 a {
   color: var(--brand);
   text-decoration: underline;
-  text-underline-offset: 0.22em;
+  text-underline-offset: 0.2em;
   transition: var(--transition);
 }
 
@@ -170,26 +169,19 @@ small,
   border-color: var(--brand);
   color: var(--brand);
   background: var(--surface);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-}
-
-.btn:active:not(:disabled) {
-  transform: translateY(0);
 }
 
 .btn.primary {
   background: var(--brand);
   border-color: var(--brand);
   color: var(--brand-ink);
-  box-shadow: 0 2px 8px rgba(207, 58, 39, 0.25);
+  box-shadow: 0 1px 4px rgba(186, 56, 40, 0.22);
 }
 
 .btn.primary:hover:not(:disabled) {
   background: var(--brand-hover);
   border-color: var(--brand-hover);
   color: var(--brand-ink);
-  filter: none;
 }
 
 .btn.small {
@@ -201,7 +193,6 @@ small,
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
   box-shadow: none;
 }
 
@@ -242,7 +233,7 @@ select:focus,
 textarea:focus {
   border-color: var(--brand);
   outline: 0;
-  box-shadow: 0 0 0 3px rgba(207, 58, 39, 0.15);
+  box-shadow: 0 0 0 3px rgba(186, 56, 40, 0.12);
 }
 
 input[type='file'] {
@@ -261,7 +252,7 @@ input[type='checkbox'] {
   display: grid;
   gap: 12px;
   padding: 24px;
-  border: 1.5px dashed var(--line-strong);
+  border: 1px dashed var(--line-strong);
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--muted);

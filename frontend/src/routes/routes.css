@@ -23,16 +23,14 @@
   letter-spacing: -0.035em;
   transition: var(--transition);
 }
-.brand:hover {
-  transform: translateY(-1px);
-}
 .brand img {
   flex: none;
-  border-radius: 8px;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 .brand small {
   display: block;
-  color: var(--brand);
+  color: var(--muted);
   font: 700 0.72rem/1.2 var(--font-body);
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -63,11 +61,13 @@
   color: var(--brand);
 }
 .mast nav a[aria-current='page'] {
-  background: var(--blush);
-  color: var(--brand);
+  background: var(--fresh);
+  color: var(--fresh-ink);
 }
 .mast nav a img {
   display: block;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 .mast .staff-link {
   margin-inline-start: auto;
@@ -84,15 +84,9 @@
   border-radius: var(--radius-pill);
   padding: 6px 14px;
   font-weight: 800;
-  box-shadow: 0 2px 6px rgba(217, 119, 6, 0.15);
 }
 .balance-pill:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(217, 119, 6, 0.22);
-}
-.balance-coin {
-  color: var(--amber);
-  font-size: 0.95rem;
+  filter: brightness(0.97);
 }
 
 /* Simulated Time & Notice Banner */
@@ -101,20 +95,14 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 18px;
-  padding: 11px 0;
+  padding: 10px 0;
   font-size: 0.82rem;
   color: var(--muted);
   border-bottom: 1px solid var(--line);
   margin-bottom: 8px;
 }
-.simtime-badge strong {
+.simtime strong {
   color: var(--brand);
-  background: var(--blush);
-  padding: 2px 7px;
-  border-radius: 4px;
-  font-size: 0.76rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
 }
 .simtime .real-help-link {
   margin-inline-start: auto;
@@ -124,8 +112,8 @@
 .demo-clock {
   font-variant-numeric: tabular-nums;
   background: var(--surface);
-  padding: 3px 8px;
-  border-radius: 5px;
+  padding: 2px 7px;
+  border-radius: 4px;
   border: 1px solid var(--line);
 }
 
@@ -133,34 +121,27 @@
 .explore-intro {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
-  margin: 12px 0 32px;
-  min-height: 248px;
-  background: linear-gradient(135deg, var(--blush) 0%, var(--surface) 100%);
-  border: 1px solid var(--line);
+  margin: 12px 0 30px;
+  min-height: 240px;
+  background: var(--fresh);
+  border: 1px solid var(--fresh-border);
   border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
 }
 .intro-copy {
   display: grid;
   align-content: center;
   justify-items: start;
   gap: 12px;
-  padding: clamp(22px, 4vw, 48px);
-}
-.intro-tag {
-  font-size: 0.74rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--brand);
+  padding: clamp(22px, 4vw, 46px);
+  color: var(--fresh-ink);
 }
 .intro-copy h1 {
   color: var(--ink);
 }
 .intro-copy p {
   max-width: 38ch;
-  color: var(--muted);
+  color: var(--ink);
   font-size: 0.98rem;
   line-height: 1.5;
   text-wrap: pretty;
@@ -187,34 +168,17 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transition: transform 0.4s ease;
 }
-.featured-recipe:hover img {
-  transform: scale(1.03);
-}
-.featured-overlay {
+.featured-recipe > span {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.1) 40%, rgba(20, 15, 12, 0.88) 100%);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 18px;
-  gap: 4px;
-}
-.featured-badge {
-  font-size: 0.72rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--amber);
-}
-.featured-title {
-  font: 1.3rem/1.2 var(--font-display);
+  bottom: 14px;
+  right: 14px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(25, 30, 25, 0.88);
+  font-size: 0.85rem;
+  font-weight: 700;
   color: #ffffff;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
 }
 
 /* Explore Layout */
@@ -223,16 +187,16 @@
   grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
   grid-template-rows: max-content 1fr;
   grid-template-areas: 'filters results' 'map results';
-  gap: 20px clamp(18px, 3vw, 42px);
+  gap: 20px clamp(18px, 3vw, 40px);
   align-items: start;
 }
 .search-tools {
   grid-area: filters;
   display: grid;
-  gap: 14px;
+  gap: 12px;
 }
 .search-tools-header h2 {
-  font-size: 1.55rem;
+  font-size: 1.5rem;
 }
 .map-panel {
   grid-area: map;
@@ -251,24 +215,15 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 10px 16px;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 .results-heading p {
-  margin-top: 4px;
+  margin-top: 3px;
   color: var(--muted);
   font-size: 0.9rem;
 }
-.surprise-btn {
-  background: var(--card);
-  border-color: var(--brand);
-  color: var(--brand);
-}
-.surprise-btn:hover {
-  background: var(--brand);
-  color: var(--brand-ink);
-}
 
-/* Surface Panels & Result Cards */
+/* Panels & Result Cards */
 .search-tools,
 .panel,
 .result-card,
@@ -284,11 +239,7 @@
 .panel,
 .result-card,
 .wallet-total {
-  padding: clamp(16px, 2.4vw, 26px);
-}
-.result-card:hover {
-  box-shadow: var(--shadow-md);
-  border-color: var(--line-strong);
+  padding: clamp(16px, 2.4vw, 24px);
 }
 .panel {
   display: grid;
@@ -313,7 +264,7 @@
   display: grid;
   grid-template-columns: 0.95fr 1.15fr 1fr;
   gap: 3px;
-  padding: 4px;
+  padding: 3px;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
@@ -330,7 +281,7 @@
 .segmented button {
   font-size: 0.82rem;
   min-height: 38px;
-  padding: 5px 4px;
+  padding: 5px 3px;
   border-radius: 6px;
   font-weight: 700;
   transition: var(--transition);
@@ -353,7 +304,7 @@
 .reward-grid,
 .coverage {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 .filters-grid {
   grid-template-columns: 1fr;
@@ -434,10 +385,10 @@
   color: var(--brand);
 }
 .routes-shell details[open] > summary {
-  margin-bottom: 11px;
+  margin-bottom: 10px;
 }
 .extra-filters summary {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: var(--muted);
 }
 .extra-filters-content {
@@ -483,7 +434,7 @@
 .map-hood {
   font: 700 20px var(--font-body);
   fill: var(--muted);
-  opacity: 0.7;
+  opacity: 0.6;
   pointer-events: none;
 }
 .route-map figcaption {
@@ -497,7 +448,7 @@
 /* Pantry Result Card */
 .results {
   display: grid;
-  gap: 20px;
+  gap: 18px;
 }
 .result-card {
   display: grid;
@@ -564,8 +515,8 @@
 }
 .status-indicator {
   font-weight: 800;
-  font-size: 0.8rem;
-  padding: 3px 9px;
+  font-size: 0.78rem;
+  padding: 2px 8px;
   border-radius: var(--radius-pill);
 }
 .status-indicator.open {
@@ -628,28 +579,17 @@
 }
 .meal-row {
   border-top: 1px solid var(--line);
-  padding: 10px 0;
+  padding: 9px 0;
   transition: var(--transition);
 }
 .meal-button {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) 20px;
+  grid-template-columns: minmax(0, 1fr) 20px;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   text-align: left;
   width: 100%;
-  padding: 4px 0;
-}
-.dish-icon {
-  font-size: 1.45rem;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  background: var(--surface);
-  border-radius: 8px;
+  padding: 3px 0;
 }
 .meal-heading-group {
   display: flex;
@@ -683,8 +623,7 @@
 .match-line {
   color: var(--muted);
   font-size: 0.82rem;
-  margin-top: 3px;
-  padding-left: 50px;
+  margin-top: 2px;
 }
 .match-line[data-complete='true'] {
   color: var(--fresh-ink);
@@ -704,7 +643,7 @@
   border: 1px solid var(--line);
   border-radius: var(--radius);
   margin-top: 12px;
-  padding: 18px;
+  padding: 16px;
   font-size: 0.92rem;
 }
 .recipe-meta-bar {
@@ -1008,7 +947,6 @@
   max-width: min(340px, 100%);
   max-height: 250px;
   border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-sm);
 }
 .cooking-status-box {
   background: var(--surface);
@@ -1032,8 +970,9 @@
 .verified-badge {
   font-size: 0.74rem;
   font-weight: 800;
-  background: var(--fresh);
-  color: var(--fresh-ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--muted);
   padding: 3px 9px;
   border-radius: var(--radius-pill);
 }
@@ -1052,7 +991,7 @@
 
 /* Wallet Card & Rewards */
 .wallet-total {
-  background: linear-gradient(135deg, var(--amber-bg) 0%, var(--surface) 100%);
+  background: var(--amber-bg);
   border: 1px solid var(--amber-border);
   color: var(--ink);
   display: flex;
@@ -1110,9 +1049,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-.reward-icon {
-  font-size: 1.6rem;
 }
 .reward-cost {
   font-size: 1.1rem;
@@ -1337,8 +1273,8 @@
     gap: 3px;
   }
   .mast nav a img {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
   }
   .mast .staff-link {
     margin-inline-start: 0;
@@ -1369,23 +1305,9 @@
   .intro-link {
     font-size: 0.84rem;
   }
-  .featured-overlay {
-    padding: 10px;
-  }
-  .featured-title {
-    font-size: 1rem;
-  }
   .meal-button {
-    grid-template-columns: auto minmax(0, 1fr) 18px;
+    grid-template-columns: minmax(0, 1fr) 18px;
     gap: 8px;
-  }
-  .dish-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 1.2rem;
-  }
-  .match-line {
-    padding-left: 40px;
   }
   .wallet-total {
     flex-direction: column;
