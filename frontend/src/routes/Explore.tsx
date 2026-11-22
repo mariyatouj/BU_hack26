@@ -364,7 +364,7 @@ export default function Explore({ f, setF }: { f: Search; setF: (f: Search) => v
     <>
       <header className="explore-intro">
         <div className="intro-copy">
-          <h1>What can I cook?</h1>
+          <h1>Cook Your Next Meal At Home–And Pay Nothing for the Ingredients</h1>
           <p>Find meals using real-time stock from a Boston pantry and ingredients already in your kitchen.</p>
           <a
             className="intro-link"
