@@ -1,160 +1,232 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import alertIcon from './assets/icons/alert.png?inline'
-import cornucopiaIcon from './assets/icons/cornucopia.png?inline'
-import mapIcon from './assets/icons/map.png?inline'
-import peopleIcon from './assets/icons/people.png?inline'
-import trainIcon from './assets/icons/TRAIN.png?inline'
-import { connect, type Api } from './api'
-import { Avatar } from './components/ui'
-import { AppCtx, type Ctx, type View } from './context'
-import { haversineKm } from './geo'
-import { setUserId } from './session'
-import type { Earned, Me, Pantry, User } from './types'
-import AlertsView from './views/AlertsView'
-import LeaderboardView from './views/LeaderboardView'
-import MeView from './views/MeView'
-import PantriesView from './views/PantriesView'
-import RecipesView from './views/RecipesView'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import logo from './assets/icons/cornucopia.png?inline'
+import exploreIcon from './assets/icons/map.png?inline'
+import cookingIcon from './assets/icons/people.png?inline'
+import walletIcon from './assets/icons/TRAIN.png?inline'
+import helpIcon from './assets/icons/alert.png?inline'
+import historical from '../../data/seed.json'
+import { bostonTime, sites } from './routes/catalog'
+import { balance, defaults, initialState, type Search } from './routes/domain'
+import { commit, listen } from './routes/store'
+import { RoutesContext, type Write } from './routes/context'
+import Explore from './routes/Explore'
+import { Cooking, Staff, Wallet } from './routes/Activity'
+import './routes/routes.css'
 
-const VIEWS: { id: View; label: string; icon?: string }[] = [
-  { id: 'pantries', label: 'Pantries', icon: mapIcon },
-  { id: 'recipes', label: 'Recipes' },
-  { id: 'leaderboard', label: 'Leaderboard', icon: peopleIcon },
-  { id: 'alerts', label: 'Alerts', icon: alertIcon },
-  { id: 'me', label: 'My points', icon: trainIcon },
-]
-const BU: [number, number] = [42.3505, -71.1054]
-const fromHash = (): View => (VIEWS.find((v) => `#${v.id}` === location.hash)?.id ?? 'pantries')
-
-function Logo() {
-  return <img className="brand-icon" src={cornucopiaIcon} width="36" height="36" alt="" />
+const pages = {
+  explore: { label: 'Explore', icon: exploreIcon },
+  cooking: { label: 'Cooking', icon: cookingIcon },
+  wallet: { label: 'Wallet', icon: walletIcon },
+  help: { label: 'Access help', icon: helpIcon },
+  staff: { label: 'Pantry editor', icon: null },
 }
-
-export default function App() {
-  const [conn, setConn] = useState<{ api: Api; mode: 'live' | 'demo'; gemini: boolean } | null>(null)
-  const [me, setMe] = useState<Me | null>(null)
-  const [users, setUsers] = useState<User[]>([])
-  const [pantryRows, setPantryRows] = useState<Pantry[]>([])
-  const [view, setView] = useState<View>(fromHash())
-  const [focusPantry, setFocusPantry] = useState<number | null>(null)
-  const [loc, setLoc] = useState<[number, number]>(BU)
-  const [toasts, setToasts] = useState<{ id: number; msg: string; pts?: number }[]>([])
-  const [unread, setUnread] = useState(0)
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [drawerOpen, setDrawerOpen] = useState(false)
-  const drawerToggle = useRef<HTMLButtonElement>(null)
-
-  const closeDrawer = () => {
-    setDrawerOpen(false)
-    drawerToggle.current?.focus()
-  }
-
-  // Pantry coordinates are public; the visitor's session-only map position stays in the browser.
-  const pantries = useMemo(() => pantryRows.map((p) => ({
-    ...p,
-    distance_km: Math.round(haversineKm(loc[0], loc[1], p.lat, p.lng) * 100) / 100,
-  })).sort((a, b) => a.distance_km - b.distance_km), [pantryRows, loc])
-
-  useEffect(() => { connect().then(setConn) }, [])
-  useEffect(() => {
-    const h = () => setView(fromHash())
-    window.addEventListener('hashchange', h)
-    return () => window.removeEventListener('hashchange', h)
-  }, [])
-
-  const refreshMe = useCallback(async () => {
-    if (!conn) return
-    const [m, n] = await Promise.all([conn.api.me(), conn.api.notifications()])
-    setMe(m)
-    setUnread(n.filter((x) => !x.read).length)
-  }, [conn])
-  const reloadPantries = useCallback(async () => { if (conn) setPantryRows(await conn.api.pantries()) }, [conn])
-
-  useEffect(() => { if (conn) { conn.api.users().then(setUsers); refreshMe() } }, [conn, refreshMe])
-  useEffect(() => { reloadPantries() }, [reloadPantries])
-
-  const push = (msg: string, pts?: number) => {
-    const id = Math.random()
-    setToasts((t) => [...t, { id, msg, pts }])
-    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 3600)
-  }
-  const celebrate = (e: Earned, what: string) => { push(what, e.points_earned || undefined); refreshMe() }
-  const go = (v: View, pantryId?: number) => {
-    if (pantryId) setFocusPantry(pantryId)
-    location.hash = v
-    setView(v)
-  }
-  const switchUser = (id: number) => { setUserId(id); refreshMe(); conn?.api.users().then(setUsers) }
-
-  const ctx = useMemo<Ctx | null>(() => conn && me ? {
-    api: conn.api, mode: conn.mode, gemini: conn.gemini, me, users, refreshMe, toast: (m) => push(m), celebrate,
-    loc, setLoc, pantries, reloadPantries, go, focusPantry,
-  } : null, [conn, me, users, loc, pantries, focusPantry]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  if (!ctx) return <div className="boot"><Logo /><p>Loading SaverMeal…</p></div>
-
+type Page = keyof typeof pages
+const pageFromHash = (): Page => {
+  const name = location.hash.slice(1).split('/')[0]
+  return Object.hasOwn(pages, name) ? (name as Page) : 'explore'
+}
+function linkedFilter() {
+  const [page, id] = location.hash.slice(1).split('/')
+  return page === 'explore' && sites.some((s) => s.id === id)
+    ? { ...defaults, scope: 'pantry' as const, pantryId: id }
+    : defaults
+}
+function AccessHelp() {
   return (
-    <AppCtx.Provider value={ctx}>
-      <div className={`app-shell${sidebarCollapsed ? ' sidebar-collapsed' : ''}${drawerOpen ? ' drawer-open' : ''}`}
-        onKeyDown={(event) => { if (drawerOpen && event.key === 'Escape') closeDrawer() }}>
-        <button ref={drawerToggle} className="btn drawer-toggle" type="button"
-          aria-expanded={drawerOpen} aria-controls="sidebar" onClick={() => setDrawerOpen(!drawerOpen)}>
-          {drawerOpen ? 'Close menu' : 'Menu'}
-        </button>
-        {drawerOpen && <div className="drawer-scrim" aria-hidden="true" onClick={closeDrawer} />}
-        <aside id="sidebar" className="sidebar" aria-label="SaverMeal sidebar">
-          <a className="brand" href="#pantries" aria-label="SaverMeal home" onClick={() => { setFocusPantry(null); if (drawerOpen) closeDrawer() }}>
-            <Logo /><span className="sidebar-label">SaverMeal<small>Boston</small></span>
+    <>
+      <header className="page-intro">
+        <h1>Access help</h1>
+        <p>Food, transit and cultural access information is open to everyone.</p>
+      </header>
+      <section className="panel">
+        <h2>Find food today</h2>
+        <p>
+          Explore uses fictional pantry sites and synthetic stock. For an actual pickup, confirm hours,
+          eligibility, service area, appointment requirements and access with the pantry.
+        </p>
+        <a href="https://www.gbfb.org/need-food/">Find a participating food pantry through GBFB ↗</a>
+        <details>
+          <summary>Historical Boston directory and contacts</summary>
+          <p>City of Boston GIS / GBFB, September 2021. Call ahead to confirm the listing.</p>
+          {historical.pantries.map((p) => (
+            <p key={p.id}>
+              <b>{p.name}</b> · {p.address} · <a href={'tel:' + p.phone}>{p.phone}</a> ·{' '}
+              <a href={p.source_url}>Directory source</a>
+            </p>
+          ))}
+        </details>
+      </section>
+      <section className="panel">
+        <h2>Help with the first trip</h2>
+        <p>
+          Check existing reduced-fare programs and eligibility before traveling. You can access these
+          resources without cooking or collecting points.
+        </p>
+        <a href="https://www.mbta.com/fares/reduced">MBTA reduced fares ↗</a>
+      </section>
+      <section className="panel">
+        <h2>Museums and shows</h2>
+        <p>
+          Check each venue for eligibility, ticket coverage and reservations. Exhibit admission and show
+          tickets can have different conditions.
+        </p>
+        <ul>
+          <li>
+            <a href="https://www.mos.org/visit/community-access">Museum of Science community access</a>
+          </li>
+          <li>
+            <a href="https://www.neaq.org/visit/offers-and-discounts/">New England Aquarium discounts</a>
+          </li>
+          <li>
+            <a href="https://www.mfa.org/visit/free-and-discounted-admission">
+              MFA free and discounted admission
+            </a>
+          </li>
+        </ul>
+      </section>
+      <section className="panel">
+        <h2>Why pantry access matters</h2>
+        <p>
+          GBFB’s 2026 Massachusetts Food Access Report estimates that 40% of Massachusetts households
+          experienced food insecurity in 2025. SaverMeal demonstrates how reachable pantry sessions can
+          connect people with meal ideas.
+        </p>
+        <a href="https://foodaccessreport.gbfb.org/the-state-of-food-insecurity">
+          GBFB and Mass General Brigham report ↗
+        </a>
+      </section>
+    </>
+  )
+}
+export default function App() {
+  const [page, setPage] = useState(pageFromHash),
+    [state, setState] = useState(initialState),
+    [ready, setReady] = useState(false)
+  const [filter, setFilter] = useState<Search>(linkedFilter),
+    [message, setMessage] = useState('')
+  const readVersion = useRef(0)
+  const refresh = useCallback(async () => {
+    const n = ++readVersion.current
+    try {
+      const data = await commit()
+      if (n === readVersion.current) {
+        setState(data)
+        setReady(true)
+      }
+    } catch {
+      setReady(false)
+      setMessage('Browser storage is unavailable. Explore is available. Enable storage to save changes.')
+    }
+  }, [])
+  useEffect(() => {
+    void refresh()
+    return listen(refresh)
+  }, [refresh])
+  useEffect(() => {
+    const update = () => {
+      setPage(pageFromHash())
+      if (location.hash.startsWith('#explore/')) setFilter(linkedFilter())
+      setMessage('')
+      window.scrollTo(0, 0)
+    }
+    window.addEventListener('hashchange', update)
+    return () => window.removeEventListener('hashchange', update)
+  }, [])
+  const write: Write = async (fn, msg) => {
+    if (!ready) {
+      setMessage('Persistent browser storage is required to save this action.')
+      return false
+    }
+    try {
+      const next = await commit(fn, state.generation)
+      readVersion.current++
+      setState(next)
+      if (msg) setMessage(msg)
+      return true
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : 'The change could not be saved.')
+      void refresh()
+      return false
+    }
+  }
+  const generation = useRef('')
+  useEffect(() => {
+    if (ready && generation.current && generation.current !== state.generation) setFilter(defaults)
+    if (ready) generation.current = state.generation
+  }, [ready, state.generation])
+  return (
+    <RoutesContext.Provider value={{ state, write, notify: setMessage }}>
+      <div className="routes-shell">
+        <a
+          href="#workspace"
+          className="skip"
+          onClick={(e) => {
+            e.preventDefault()
+            document.getElementById('workspace')?.focus()
+          }}
+        >
+          Skip to content
+        </a>
+        <header className="mast">
+          <a href="#explore" className="brand">
+            <img src={logo} width="42" height="42" alt="" />
+            <span>
+              SaverMeal<small>Boston</small>
+            </span>
           </a>
-          <button className="btn sidebar-toggle" type="button" aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            aria-expanded={!sidebarCollapsed} aria-controls="sidebar" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}>
-            <span aria-hidden="true">{sidebarCollapsed ? '»' : '«'}</span><span className="sidebar-label">Collapse</span>
-          </button>
-          <nav aria-label="Main">
-            {VIEWS.map((v) => (
-              <a key={v.id} href={`#${v.id}`} className={view === v.id ? 'on' : ''} title={v.label}
-                aria-label={v.id === 'alerts' && unread > 0 ? `Alerts, ${unread} unread` : v.label}
-                aria-current={view === v.id ? 'page' : undefined}
-                onClick={() => { if (v.id === 'pantries') setFocusPantry(null); if (drawerOpen) closeDrawer() }}>
-                {v.icon ? <img className="nav-icon" src={v.icon} width="26" height="26" alt="" /> : (
-                  <svg className="nav-icon" viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
-                    <path d="M4 5h6a2 2 0 0 1 2 2 2 2 0 0 1 2-2h6v13h-6a2 2 0 0 0-2 2 2 2 0 0 0-2-2H4zM12 7v13"
-                      fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-                  </svg>
-                )}
-                <span className="sidebar-label">{v.label}</span>
-                {v.id === 'alerts' && unread > 0 && <span className="count" aria-hidden="true">{unread}</span>}
+          <nav aria-label="Main navigation">
+            {(Object.keys(pages) as Page[]).map((k) => (
+              <a
+                key={k}
+                className={k === 'staff' ? 'staff-link' : undefined}
+                aria-current={page === k ? 'page' : undefined}
+                href={'#' + k}
+              >
+                {pages[k].icon && <img src={pages[k].icon} width="29" height="29" alt="" />}
+                {pages[k].label}
               </a>
             ))}
           </nav>
-          <div className="sidebar-profile">
-            <label className="user-switch">
-              <Avatar name={me!.name} line={me!.t_line} size={30} />
-              <select value={me!.id} onChange={(e) => switchUser(Number(e.target.value))} aria-label="Signed in as (demo)">
-                {users.map((u) => <option key={u.id} value={u.id}>{u.name}</option>)}
-              </select>
-            </label>
-            <a className="pts-pill" href="#me" onClick={() => { if (drawerOpen) closeDrawer() }}><b>{me!.points}</b> pts</a>
-          </div>
-        </aside>
-        <div className={`app-content${view === 'pantries' ? ' map-content' : ''}`}>
-          {conn!.mode === 'demo' && <p className="demo-note">Browser demo mode — pantry directory records are historical public listings; inventory and activity are synthetic and reset on reload.</p>}
-          <main id="main-content">
-            {view === 'pantries' && <PantriesView key={focusPantry ?? 0} />}
-            {view === 'recipes' && <RecipesView />}
-            {view === 'leaderboard' && <LeaderboardView />}
-            {view === 'alerts' && <AlertsView />}
-            {view === 'me' && <MeView />}
-          </main>
-          {view !== 'pantries' && <footer className="foot">
-            <span>SaverMeal · BostonHacks 2026 · Boundless Boston track</span>
-            <span className="muted">Historical public pantry directory · Demo inventory · Call ahead before visiting.</span>
-          </footer>}
+          <a className="balance-pill" href="#wallet">
+            {balance(state)} pts
+          </a>
+        </header>
+        <div className="simtime">
+          <span>
+            <strong>Demo</strong> · Fictional pantry sessions
+          </span>
+          <span className="demo-clock">Simulated {bostonTime(state.clock)} ET</span>
+          <a href="#help">
+            Find real food assistance <span aria-hidden="true">↗</span>
+          </a>
         </div>
+        {message && (
+          <div className="feedback" role="status">
+            <span>{message}</span>
+            <button aria-label="Dismiss message" onClick={() => setMessage('')}>
+              ×
+            </button>
+          </div>
+        )}
+        <main
+          id="workspace"
+          className={page === 'explore' ? undefined : 'workspace-inner'}
+          tabIndex={-1}
+          key={state.generation}
+        >
+          {page === 'explore' ? (
+            <Explore f={filter} setF={setFilter} />
+          ) : page === 'cooking' ? (
+            <Cooking />
+          ) : page === 'wallet' ? (
+            <Wallet />
+          ) : page === 'staff' ? (
+            <Staff />
+          ) : (
+            <AccessHelp />
+          )}
+        </main>
       </div>
-      <div className="toasts" aria-live="polite">
-        {toasts.map((t) => <div key={t.id} className="toast">{t.pts ? <b>+{t.pts} pts</b> : null}<span>{t.msg}</span></div>)}
-      </div>
-    </AppCtx.Provider>
+    </RoutesContext.Provider>
   )
 }

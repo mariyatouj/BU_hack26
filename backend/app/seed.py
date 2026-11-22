@@ -12,7 +12,7 @@ from .alerts import ingredients_for_dish
 from .db import Base, SessionLocal, engine
 from .models import (Alert, InventoryItem, Pantry, PantryRating, PointEvent, Recipe, RecipeRating, User,
                      utcnow)
-from .points import POINTS
+from .points import HISTORICAL_POINTS
 
 SEED_PATH = Path(__file__).resolve().parents[2] / "data" / "seed.json"
 DEMO_INVENTORY_PATH = Path(__file__).resolve().parents[2] / "data" / "demo_inventory.csv"
@@ -34,7 +34,7 @@ def seed(db: Session) -> bool:
     db.flush()
 
     def award(uid, action, days_ago, ref=None):
-        pts = POINTS[action]
+        pts = HISTORICAL_POINTS[action]
         db.add(PointEvent(user_id=uid, action=action, points=pts, ref_id=ref,
                           created_at=now - timedelta(days=days_ago, hours=uid)))
         users[uid].points += pts

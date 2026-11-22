@@ -25,25 +25,20 @@ def test_pantries_sorted_by_distance():
         assert all(item["source"] == "demo" for item in d["items"])
 
 
-def test_recipe_upload_awards_points_and_triggers_alert():
+def test_legacy_public_upload_cannot_publish_photos_or_award_points():
     with client() as c:
-        before = c.get("/api/me", headers={"X-User-Id": "3"}).json()["points"]
-        r = c.post("/api/recipes", headers={"X-User-Id": "3"}, json={
-            "title": "Spicy kimchi fried rice", "ingredients": ["rice", "eggs"], "culture_tags": ["Korean"],
-            "pantry_id": 1, "image_url": "data:image/png;base64,AAAA"}).json()
-        assert r["points_earned"] == 30
-        assert r["total"] == before + 30
-        assert r["alerts_triggered"] == 1  # user 1 has a fried-rice alert near Allston
-        notes = c.get("/api/notifications", headers={"X-User-Id": "1"}).json()
-        assert any("fried rice" in n["message"].lower() for n in notes)
+        before = c.get("/api/me").json()["points"]
+        res = c.post("/api/recipes", json={"title": "Rice", "ingredients": ["rice"], "image_url": "demo"})
+        assert res.status_code == 410
+        assert c.get("/api/me").json()["points"] == before
 
 
-def test_rate_recipe_once_for_points():
+def test_legacy_ratings_do_not_award_cooking_points():
     with client() as c:
         h = {"X-User-Id": "9"}
         first = c.post("/api/recipes/1/rate", headers=h, json={"taste": 5, "ease": 4}).json()
         again = c.post("/api/recipes/1/rate", headers=h, json={"taste": 4, "ease": 4}).json()
-        assert first["points_earned"] == 5 and again["points_earned"] == 0
+        assert first["points_earned"] == 0 and again["points_earned"] == 0
         assert c.post("/api/recipes/1/rate", headers={"X-User-Id": "2"}, json={"taste": 5, "ease": 5}).status_code == 400
 
 
@@ -119,3 +114,25 @@ def test_directions_validation_and_missing_pantry():
 
     assert bad_location.status_code == 422
     assert missing.status_code == 404
+
+
+def test_route_guidance_accepts_catalog_roles_and_handles_bad_forms():
+    with client() as c:
+        request = {"recipe_id": "dal", "pantry": ["red lentils@split dry", "tomatoes@canned"],
+                   "home": ["cumin@standard"], "missing": ["onion@standard"], "uncertain": []}
+        response = c.post("/api/routes/adapt", json=request)
+        assert response.status_code == 200
+        assert response.json()["source"] == "catalog"
+        assert "onion" in response.json()["tip"]
+        request["pantry"][0] = "rice noodles@dry"
+        assert c.post("/api/routes/adapt", json=request).status_code == 422
+
+
+def test_latest_stockout_supersedes_previous_available_observation():
+    with client() as c:
+        row = {"name": "rice", "category": "grains", "level": "out"}
+        c.post("/api/pantries/1/inventory", json={"items": [row]}).raise_for_status()
+        alert = c.post("/api/alerts", json={"dish": "rice", "ingredients": ["rice"],
+                       "lat": 42.35183, "lng": -71.071014, "radius_km": 1}).json()
+        match = next(m for m in alert["matches"] if m["pantry_id"] == 1)
+        assert match["have"] == [] and match["missing"] == ["rice"]

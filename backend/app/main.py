@@ -22,6 +22,7 @@ from .models import (Alert, InventoryItem, Notification, Pantry, PantryRating, P
                      User, utcnow)
 from .points import POINTS, PRIZES, award, level_for
 from .seed import init_db
+from .route_services import router as route_services
 
 
 @asynccontextmanager
@@ -31,6 +32,7 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(title="SaverMeal API", version="1.0.0", lifespan=lifespan)
+app.include_router(route_services)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=os.getenv("CORS_ORIGINS", "*").split(","),
@@ -247,7 +249,7 @@ def submit_pantry(body: PantryIn, user: User = Depends(current_user), db: Sessio
     p = Pantry(**body.model_dump(), verified=False, submitted_by=user.id)
     db.add(p)
     db.commit()
-    return {"id": p.id, "verified": False, "message": f"Thanks! You'll earn {POINTS['submit_pantry']} points once it's verified."}
+    return {"id": p.id, "verified": False, "message": "Directory suggestion submitted for review."}
 
 
 @app.post("/api/pantries/{pantry_id}/verify")
@@ -265,8 +267,16 @@ def verify_pantry(pantry_id: int, db: Session = Depends(get_db)):
 def update_inventory(pantry_id: int, body: InventoryIn, user: User = Depends(current_user),
                      db: Session = Depends(get_db)):
     p = db.get(Pantry, pantry_id) or _404("Pantry")
-    for it in body.items:
-        db.add(InventoryItem(pantry_id=p.id, source="community", **it.model_dump()))
+    prior = {row.name.strip().casefold(): row for row in latest_items(db, p.id)}
+    changes = []
+    for item in body.items:
+        old = prior.get(item.name.strip().casefold())
+        if old is None or (item.level, item.category) != (old.level, old.category):
+            changes.append(item)
+    if not changes and (not body.inventory_level or body.inventory_level == p.inventory_level):
+        return {"points_earned": 0, "alerts_triggered": 0}
+    for item in changes:
+        db.add(InventoryItem(pantry_id=p.id, source="demo", **item.model_dump()))
     if body.inventory_level:
         p.inventory_level = body.inventory_level
     pts = award(db, user, "update_inventory", p.id)
@@ -340,18 +350,9 @@ def list_recipes(culture: str | None = None, dietary: str | None = None, pantry_
 
 @app.post("/api/recipes", status_code=201)
 def create_recipe(body: RecipeIn, user: User = Depends(current_user), db: Session = Depends(get_db)):
-    if body.pantry_id:
-        db.get(Pantry, body.pantry_id) or _404("Pantry")
-    r = Recipe(user_id=user.id, **body.model_dump())
-    db.add(r)
-    db.flush()
-    pts = award(db, user, "share_recipe", r.id)
-    if body.image_url:
-        pts += award(db, user, "recipe_photo", r.id)
-    db.refresh(r)
-    notes = alert_engine.on_new_recipe(db, r)
-    db.commit()
-    return {"recipe": recipe_out(r), "points_earned": pts, "total": user.points, "alerts_triggered": len(notes)}
+    # The historical public feed only contains the seeded community examples.
+    # Cooking photos and attestations now belong exclusively to the local wallet.
+    raise HTTPException(410, "Public meal uploads are retired. Record a private meal in Cooking.")
 
 
 @app.post("/api/recipes/{recipe_id}/rate")
@@ -482,7 +483,7 @@ class SuggestIn(BaseModel):
 @app.post("/api/ai/suggest")
 def ai_suggest(body: SuggestIn, db: Session = Depends(get_db)):
     p = db.get(Pantry, body.pantry_id) or _404("Pantry")
-    items = [i.name for i in latest_items(db, p.id) if i.level != "out"]
+    items = sorted(alert_engine.fresh_stock(db, p.id))
     return suggest_meals(p.name, p.neighborhood, items, body.dietary, body.culture)
 
 

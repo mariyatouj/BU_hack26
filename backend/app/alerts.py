@@ -57,17 +57,19 @@ def fresh_stock(db: Session, pantry_id: int) -> set[str]:
         select(InventoryItem).where(
             InventoryItem.pantry_id == pantry_id,
             InventoryItem.updated_at >= cutoff,
-            InventoryItem.level != "out",
-        )
+        ).order_by(InventoryItem.updated_at.desc(), InventoryItem.id.desc())
     ).all()
-    return {norm(r.name) for r in rows}
+    latest = {}
+    for row in rows:
+        latest.setdefault(norm(row.name), row.level)
+    return {name for name, level in latest.items() if level != "out"}
 
 
 def match_score(wanted: list[str], stock: set[str]) -> tuple[float, list[str], list[str]]:
-    wanted_n = [norm(w) for w in wanted]
+    wanted_n = list(dict.fromkeys(norm(w) for w in wanted if norm(w)))
     if not wanted_n:
         return 0.0, [], []
-    have = [w for w in wanted_n if any(w in s or s in w for s in stock)]
+    have = [w for w in wanted_n if w in stock]
     missing = [w for w in wanted_n if w not in have]
     return len(have) / len(wanted_n), have, missing
 

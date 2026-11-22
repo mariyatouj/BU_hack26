@@ -226,3 +226,8 @@ __marimo__/
 node_modules/
 
 .DS_Store
+# Local application state and verification output
+backend/savermeal.db*
+frontend/dist-demo/
+frontend/test-results/
+frontend/playwright-report/

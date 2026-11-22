@@ -16,6 +16,7 @@ from __future__ import annotations
 import asyncio
 import math
 import os
+from time import monotonic
 from datetime import datetime, timezone
 from typing import Any
 from urllib.parse import urlencode
@@ -43,10 +44,32 @@ def _headers() -> dict[str, str]:
     return {"x-api-key": key} if key else {}
 
 
+# Cache public departure/alert payloads by stop IDs. Coordinate lookups remain request-scoped.
+_public_cache: dict[tuple, tuple[float, dict]] = {}
+_retry_after = 0.0
+
+
 async def _get(client: httpx.AsyncClient, path: str, params: dict[str, Any]) -> dict:
+    global _retry_after
+    cacheable = path in {"/predictions", "/alerts"}
+    key = (path, tuple(sorted(params.items()))) if cacheable else ()
+    now = monotonic()
+    cached = _public_cache.get(key)
+    if cached and now < cached[0]:
+        return cached[1]
+    if now < _retry_after:
+        raise httpx.RequestError("MBTA rate limit cooling down")
     response = await client.get(path, params=params)
+    if response.status_code == 429:
+        delay = response.headers.get("Retry-After", "")
+        _retry_after = now + (min(int(delay), 300) if delay.isdecimal() else 30)
     response.raise_for_status()
-    return response.json()
+    data = response.json()
+    if cacheable:
+        if len(_public_cache) >= 128:
+            _public_cache.pop(min(_public_cache, key=lambda k: _public_cache[k][0]))
+        _public_cache[key] = (now + 25, data)
+    return data
 
 
 def _distance_m(lat1: float, lng1: float, lat2: float, lng2: float) -> int:

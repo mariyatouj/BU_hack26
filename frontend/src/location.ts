@@ -33,9 +33,3 @@ export function getOneTimeLocation(): Promise<OneTimeLocation> {
     )
   })
 }
-
-/** Persist only a broad alert area, never the one-time precise device position. */
-export const coarseAlertLocation = (lat: number, lng: number): [number, number] => [
-  Math.round(lat * 100) / 100,
-  Math.round(lng * 100) / 100,
-]

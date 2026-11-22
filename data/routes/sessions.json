@@ -1,0 +1,634 @@
+[
+  {
+    "id": "ruggles-initial",
+    "pantryId": "ruggles",
+    "sessionId": "ruggles-sat",
+    "startsAt": "2026-11-21T15:30:00.000Z",
+    "endsAt": "2026-11-21T20:00:00.000Z",
+    "observedAt": "2026-11-21T15:30:00.000Z",
+    "capacity": "Additional visitors welcome",
+    "sourceMode": "demo",
+    "items": [
+      {
+        "key": "red lentils@split dry",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T16:30:00.000Z",
+        "surplus": true,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "tomatoes@canned",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "onion@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "cumin@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "rice@dry",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "carrot@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "black beans@canned",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "potato@standard",
+        "state": "limited",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      }
+    ],
+    "timezone": "America/New_York",
+    "distributionModel": "Walk-up choice"
+  },
+  {
+    "id": "plaza-initial",
+    "pantryId": "plaza",
+    "sessionId": "plaza-sat",
+    "startsAt": "2026-11-21T15:30:00.000Z",
+    "endsAt": "2026-11-21T20:00:00.000Z",
+    "observedAt": "2026-11-21T15:30:00.000Z",
+    "capacity": "Normal distribution",
+    "sourceMode": "demo",
+    "items": [
+      {
+        "key": "chickpeas@canned",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T16:30:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "tomatoes@canned",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "onion@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "cumin@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "cucumber@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "lemon@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "garlic@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "pasta@dry",
+        "state": "limited",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      }
+    ],
+    "timezone": "America/New_York",
+    "distributionModel": "Appointment"
+  },
+  {
+    "id": "kenmore-initial",
+    "pantryId": "kenmore",
+    "sessionId": "kenmore-sat",
+    "startsAt": "2026-11-21T15:30:00.000Z",
+    "endsAt": "2026-11-21T20:00:00.000Z",
+    "observedAt": "2026-11-21T15:30:00.000Z",
+    "capacity": "Normal distribution",
+    "sourceMode": "demo",
+    "items": [
+      {
+        "key": "oats@rolled",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T16:30:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "milk@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "banana@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "peanut butter@smooth",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "rice@cooked",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "egg@shell",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "peas@frozen",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "soy sauce@standard",
+        "state": "limited",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      }
+    ],
+    "timezone": "America/New_York",
+    "distributionModel": "Walk-up choice"
+  },
+  {
+    "id": "andrew-initial",
+    "pantryId": "andrew",
+    "sessionId": "andrew-sat",
+    "startsAt": "2026-11-21T15:30:00.000Z",
+    "endsAt": "2026-11-21T20:00:00.000Z",
+    "observedAt": "2026-11-21T15:30:00.000Z",
+    "capacity": "Normal distribution",
+    "sourceMode": "demo",
+    "items": [
+      {
+        "key": "black beans@canned",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T16:30:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "rice@dry",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "onion@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "tortilla@ready to eat",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "cucumber@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "lemon@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "pepper vegetable@standard",
+        "state": "limited",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      }
+    ],
+    "timezone": "America/New_York",
+    "distributionModel": "Appointment"
+  },
+  {
+    "id": "maverick-initial",
+    "pantryId": "maverick",
+    "sessionId": "maverick-sat",
+    "startsAt": "2026-11-21T15:30:00.000Z",
+    "endsAt": "2026-11-21T20:00:00.000Z",
+    "observedAt": "2026-11-21T15:30:00.000Z",
+    "capacity": "Limited capacity",
+    "sourceMode": "demo",
+    "items": [
+      {
+        "key": "white beans@canned",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T16:30:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "bread@ready to eat",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "lemon@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "cabbage@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "carrot@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "oil@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "potato@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "onion@standard",
+        "state": "limited",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      }
+    ],
+    "timezone": "America/New_York",
+    "distributionModel": "Walk-up choice"
+  },
+  {
+    "id": "dewey-initial",
+    "pantryId": "dewey",
+    "sessionId": "dewey-sat",
+    "startsAt": "2026-11-21T15:30:00.000Z",
+    "endsAt": "2026-11-21T20:00:00.000Z",
+    "observedAt": "2026-11-21T15:30:00.000Z",
+    "capacity": "Normal distribution",
+    "sourceMode": "demo",
+    "items": [
+      {
+        "key": "tofu@firm",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T16:30:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "rice@dry",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "ginger@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "soy sauce@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "peanut butter@smooth",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "tomatoes@canned",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "onion@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "potato@standard",
+        "state": "limited",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      }
+    ],
+    "timezone": "America/New_York",
+    "distributionModel": "Appointment"
+  },
+  {
+    "id": "symphony-initial",
+    "pantryId": "symphony",
+    "sessionId": "symphony-sat",
+    "startsAt": "2026-11-21T15:30:00.000Z",
+    "endsAt": "2026-11-21T20:00:00.000Z",
+    "observedAt": "2026-11-21T15:30:00.000Z",
+    "capacity": "Normal distribution",
+    "sourceMode": "demo",
+    "items": [
+      {
+        "key": "chickpeas@canned",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T16:30:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "tortilla@ready to eat",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "lemon@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "carrot@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "cabbage@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "potato@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "egg@shell",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "tomatoes@canned",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "oil@standard",
+        "state": "limited",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      }
+    ],
+    "timezone": "America/New_York",
+    "distributionModel": "Walk-up choice"
+  },
+  {
+    "id": "hynes-initial",
+    "pantryId": "hynes",
+    "sessionId": "hynes-sat",
+    "startsAt": "2026-11-21T15:30:00.000Z",
+    "endsAt": "2026-11-21T20:00:00.000Z",
+    "observedAt": "2026-11-21T15:30:00.000Z",
+    "capacity": "Normal distribution",
+    "sourceMode": "demo",
+    "items": [
+      {
+        "key": "red lentils@split dry",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T16:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "tomatoes@canned",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "onion@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "cumin@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "milk@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "oats@rolled",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "banana@standard",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "peanut butter@smooth",
+        "state": "available",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      },
+      {
+        "key": "cucumber@standard",
+        "state": "limited",
+        "observedAt": "2026-11-21T15:30:00.000Z",
+        "validUntil": "2026-11-21T20:00:00.000Z",
+        "surplus": false,
+        "sourceMode": "demo"
+      }
+    ],
+    "timezone": "America/New_York",
+    "distributionModel": "Appointment"
+  }
+]

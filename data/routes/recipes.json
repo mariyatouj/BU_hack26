@@ -1,0 +1,690 @@
+[
+  {
+    "id": "dal",
+    "title": "Tomato masoor dal",
+    "cuisine": "South Asian",
+    "minutes": 30,
+    "equipment": "stove",
+    "required": [
+      [
+        "red lentils@split dry"
+      ],
+      [
+        "tomatoes@canned"
+      ],
+      [
+        "onion@standard"
+      ],
+      [
+        "cumin@standard"
+      ]
+    ],
+    "optional": [
+      "rice"
+    ],
+    "servings": 2,
+    "steps": [
+      "Rinse ½ cup split red lentils",
+      "Chop half an onion",
+      "Simmer both with 1 cup canned tomatoes, ½ teaspoon cumin and 2 cups water, stirring until the lentils soften, about 20 minutes",
+      "Add water to loosen."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "beans",
+    "title": "Black beans and rice",
+    "cuisine": "Latin American",
+    "minutes": 30,
+    "equipment": "stove",
+    "required": [
+      [
+        "rice@dry"
+      ],
+      [
+        "black beans@canned"
+      ],
+      [
+        "onion@standard"
+      ]
+    ],
+    "optional": [
+      "cumin"
+    ],
+    "servings": 2,
+    "steps": [
+      "Simmer ½ cup rice in water according to its package",
+      "Soften half a chopped onion in a splash of water",
+      "Add one drained can of black beans, heat through and spoon over rice."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "chana",
+    "title": "Chickpea tomato masala adaptation",
+    "cuisine": "South Asian",
+    "minutes": 25,
+    "equipment": "stove",
+    "required": [
+      [
+        "chickpeas@canned"
+      ],
+      [
+        "tomatoes@canned"
+      ],
+      [
+        "cumin@standard"
+      ],
+      [
+        "onion@standard"
+      ]
+    ],
+    "optional": [
+      "rice"
+    ],
+    "servings": 2,
+    "steps": [
+      "Soften half a diced onion with water",
+      "Stir in ½ teaspoon cumin, one can each of drained chickpeas and tomatoes",
+      "Simmer for 15 minutes, crushing a few chickpeas to thicken."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "miso",
+    "title": "Ginger tofu rice bowl",
+    "cuisine": "Japanese-inspired",
+    "minutes": 30,
+    "equipment": "stove",
+    "required": [
+      [
+        "rice@dry"
+      ],
+      [
+        "tofu@firm"
+      ],
+      [
+        "ginger@standard"
+      ],
+      [
+        "soy sauce@standard"
+      ]
+    ],
+    "optional": [
+      "carrot"
+    ],
+    "servings": 2,
+    "steps": [
+      "Cook ½ cup rice in water",
+      "Simmer 200 g cubed tofu with grated ginger, a spoonful of soy sauce and a splash of water for 8 minutes",
+      "Serve over rice."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "oats",
+    "title": "Peanut butter banana oats",
+    "cuisine": "American",
+    "minutes": 8,
+    "equipment": "microwave",
+    "required": [
+      [
+        "oats@rolled"
+      ],
+      [
+        "banana@standard"
+      ],
+      [
+        "peanut butter@smooth"
+      ]
+    ],
+    "optional": [
+      "milk"
+    ],
+    "servings": 2,
+    "steps": [
+      "Combine ½ cup rolled oats and 1 cup water in a large bowl",
+      "Microwave in short intervals until soft",
+      "Stir in a tablespoon of peanut butter and a sliced banana."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "salad",
+    "title": "Lemon chickpea salad",
+    "cuisine": "Eastern Mediterranean",
+    "minutes": 10,
+    "equipment": "no cook",
+    "required": [
+      [
+        "chickpeas@canned"
+      ],
+      [
+        "cucumber@standard"
+      ],
+      [
+        "lemon@standard"
+      ]
+    ],
+    "optional": [
+      "oil"
+    ],
+    "servings": 2,
+    "steps": [
+      "Drain a can of chickpeas",
+      "Dice half a cucumber, squeeze half a lemon over both, and toss",
+      "Mash some chickpeas for a softer texture."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "pasta",
+    "title": "Pasta e ceci adaptation",
+    "cuisine": "Italian",
+    "minutes": 30,
+    "equipment": "stove",
+    "required": [
+      [
+        "pasta@dry"
+      ],
+      [
+        "chickpeas@canned"
+      ],
+      [
+        "tomatoes@canned"
+      ],
+      [
+        "garlic@standard"
+      ]
+    ],
+    "optional": [
+      "oil"
+    ],
+    "servings": 2,
+    "steps": [
+      "Soften a crushed garlic clove in a little water",
+      "Add 1 cup tomatoes, one drained can of chickpeas and 3 cups water",
+      "Bring to a boil and add 120 g small pasta",
+      "Stir until tender."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "hash",
+    "title": "Cabbage and potato skillet",
+    "cuisine": "Irish-inspired",
+    "minutes": 35,
+    "equipment": "stove",
+    "required": [
+      [
+        "potato@standard"
+      ],
+      [
+        "cabbage@standard"
+      ],
+      [
+        "oil@standard"
+      ],
+      [
+        "onion@standard"
+      ]
+    ],
+    "optional": [
+      "pepper"
+    ],
+    "servings": 2,
+    "steps": [
+      "Cube two potatoes and simmer until tender",
+      "Drain",
+      "Shred a cup of cabbage",
+      "Cook half a sliced onion in a tablespoon of oil, then add cabbage and potatoes and fry until golden."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "menemen",
+    "title": "Tomato and pepper eggs adaptation",
+    "cuisine": "Turkish-inspired",
+    "minutes": 20,
+    "equipment": "stove",
+    "required": [
+      [
+        "egg@shell"
+      ],
+      [
+        "tomatoes@canned"
+      ],
+      [
+        "pepper vegetable@standard"
+      ],
+      [
+        "oil@standard"
+      ]
+    ],
+    "optional": [
+      "bread"
+    ],
+    "servings": 2,
+    "steps": [
+      "Soften one chopped bell pepper in a teaspoon of oil",
+      "Add 1 cup canned tomatoes and simmer until thick",
+      "Stir in two beaten eggs and cook until set."
+    ],
+    "diet": [
+      "Vegetarian"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "soup",
+    "title": "Carrot and red lentil soup",
+    "cuisine": "South Asian",
+    "minutes": 30,
+    "equipment": "stove",
+    "required": [
+      [
+        "red lentils@split dry"
+      ],
+      [
+        "carrot@standard"
+      ],
+      [
+        "cumin@standard"
+      ]
+    ],
+    "optional": [
+      "lemon"
+    ],
+    "servings": 2,
+    "steps": [
+      "Rinse ½ cup lentils",
+      "Dice two carrots",
+      "Simmer with ½ teaspoon cumin and 3 cups water until tender",
+      "Mash lightly and loosen with hot water."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "congee",
+    "title": "Ginger rice porridge",
+    "cuisine": "Chinese",
+    "minutes": 55,
+    "equipment": "stove",
+    "required": [
+      [
+        "rice@dry"
+      ],
+      [
+        "ginger@standard"
+      ]
+    ],
+    "optional": [
+      "soy sauce"
+    ],
+    "servings": 2,
+    "steps": [
+      "Rinse ½ cup rice",
+      "Bring to a boil with 4 cups water and three slices of ginger",
+      "Cover loosely and simmer, stirring occasionally, until creamy."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "slaw",
+    "title": "Sesame-free cabbage slaw",
+    "cuisine": "Chinese-inspired",
+    "minutes": 12,
+    "equipment": "no cook",
+    "required": [
+      [
+        "cabbage@standard"
+      ],
+      [
+        "carrot@standard"
+      ],
+      [
+        "soy sauce@standard"
+      ],
+      [
+        "lemon@standard"
+      ]
+    ],
+    "optional": [
+      "ginger"
+    ],
+    "servings": 2,
+    "steps": [
+      "Shred 1 cup cabbage and grate one carrot",
+      "Toss with a teaspoon of soy sauce and lemon juice to taste",
+      "Rest for 5 minutes."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "toast",
+    "title": "White bean mash on bread",
+    "cuisine": "Italian-inspired",
+    "minutes": 10,
+    "equipment": "no cook",
+    "required": [
+      [
+        "white beans@canned"
+      ],
+      [
+        "bread@ready to eat"
+      ],
+      [
+        "lemon@standard"
+      ]
+    ],
+    "optional": [
+      "garlic"
+    ],
+    "servings": 2,
+    "steps": [
+      "Drain one can of white beans",
+      "Mash with lemon juice and a splash of water",
+      "Spread onto four slices of bread."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "stew",
+    "title": "Peanut and tomato stew adaptation",
+    "cuisine": "West African-inspired",
+    "minutes": 30,
+    "equipment": "stove",
+    "required": [
+      [
+        "peanut butter@smooth"
+      ],
+      [
+        "tomatoes@canned"
+      ],
+      [
+        "onion@standard"
+      ],
+      [
+        "potato@standard"
+      ]
+    ],
+    "optional": [
+      "rice"
+    ],
+    "servings": 2,
+    "steps": [
+      "Dice one potato and half an onion",
+      "Simmer in 1 cup tomatoes and 2 cups water until tender",
+      "Thin two tablespoons of peanut butter with hot broth and stir into the pot."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "taco",
+    "title": "Black bean cucumber tacos",
+    "cuisine": "Mexican-inspired",
+    "minutes": 12,
+    "equipment": "no cook",
+    "required": [
+      [
+        "black beans@canned"
+      ],
+      [
+        "tortilla@ready to eat"
+      ],
+      [
+        "cucumber@standard"
+      ],
+      [
+        "lemon@standard"
+      ]
+    ],
+    "optional": [
+      "cumin"
+    ],
+    "servings": 2,
+    "steps": [
+      "Mash a drained can of ready-to-eat black beans with lemon juice",
+      "Divide among four ready-to-eat tortillas and top with diced cucumber."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "peas",
+    "title": "Pea and potato mash",
+    "cuisine": "British-inspired",
+    "minutes": 25,
+    "equipment": "stove",
+    "required": [
+      [
+        "potato@standard"
+      ],
+      [
+        "peas@frozen"
+      ],
+      [
+        "oil@standard"
+      ]
+    ],
+    "optional": [
+      "pepper"
+    ],
+    "servings": 2,
+    "steps": [
+      "Cube two potatoes and boil until tender",
+      "Add a cup of frozen peas and cook according to the packet",
+      "Drain and mash with a teaspoon of oil."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "fried",
+    "title": "Egg and pea fried rice",
+    "cuisine": "Chinese",
+    "minutes": 20,
+    "equipment": "stove",
+    "required": [
+      [
+        "rice@cooked"
+      ],
+      [
+        "egg@shell"
+      ],
+      [
+        "peas@frozen"
+      ],
+      [
+        "soy sauce@standard"
+      ],
+      [
+        "oil@standard"
+      ]
+    ],
+    "optional": [
+      "onion"
+    ],
+    "servings": 2,
+    "steps": [
+      "Heat a teaspoon of oil",
+      "Scramble two eggs until set",
+      "Add cooked peas and 2 cups safely chilled cooked rice",
+      "Stir until steaming throughout, then season with soy sauce."
+    ],
+    "diet": [
+      "Vegetarian"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "porridge",
+    "title": "Milk and oat porridge",
+    "cuisine": "Irish",
+    "minutes": 12,
+    "equipment": "stove",
+    "required": [
+      [
+        "oats@rolled"
+      ],
+      [
+        "milk@standard"
+      ]
+    ],
+    "optional": [
+      "banana"
+    ],
+    "servings": 2,
+    "steps": [
+      "Simmer ½ cup oats with 1 cup milk, stirring frequently until soft",
+      "Add a splash of water to loosen."
+    ],
+    "diet": [
+      "Vegetarian"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "wrap",
+    "title": "Lemony bean wraps",
+    "cuisine": "American",
+    "minutes": 10,
+    "equipment": "no cook",
+    "required": [
+      [
+        "white beans@canned",
+        "chickpeas@canned"
+      ],
+      [
+        "tortilla@ready to eat"
+      ],
+      [
+        "lemon@standard"
+      ],
+      [
+        "carrot@standard"
+      ]
+    ],
+    "optional": [
+      "cucumber"
+    ],
+    "servings": 2,
+    "steps": [
+      "Mash one drained can of white beans or chickpeas with lemon juice",
+      "Spread onto four ready-to-eat tortillas, add grated carrot and roll up."
+    ],
+    "diet": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "ricepudding",
+    "title": "Banana rice pudding",
+    "cuisine": "Caribbean-inspired",
+    "minutes": 18,
+    "equipment": "stove",
+    "required": [
+      [
+        "rice@cooked"
+      ],
+      [
+        "banana@standard"
+      ],
+      [
+        "milk@standard"
+      ]
+    ],
+    "optional": [
+      "cinnamon"
+    ],
+    "servings": 2,
+    "steps": [
+      "Combine 1 cup safely chilled cooked rice, 1 cup milk and one mashed banana",
+      "Simmer gently until steaming throughout and creamy, stirring often."
+    ],
+    "diet": [
+      "Vegetarian"
+    ],
+    "source": "Original SaverMeal demonstration recipe",
+    "license": "CC0-1.0"
+  }
+]

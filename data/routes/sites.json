@@ -1,0 +1,536 @@
+[
+  {
+    "id": "ruggles",
+    "name": "Ruggles Kitchen",
+    "neighborhood": "Roxbury",
+    "zip": "02120",
+    "isDemo": true,
+    "lat": 42.33741,
+    "lng": -71.089021,
+    "address": "Simulated pickup near Northeastern, Forsyth St, Roxbury",
+    "serviceArea": "Boston demonstration area",
+    "instructions": "Walk-up. Select your own items.",
+    "parking": "Unverified",
+    "contact": "No public contact for this fictional pantry",
+    "source": "SaverMeal fictional sessions; MBTA GTFS entrance coordinates",
+    "retrievedAt": "2026-11-22",
+    "access": [
+      {
+        "pattern": "Orange-3-0",
+        "stop": "70010",
+        "entrance": "door-rugg-forsyth",
+        "meters": 170,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70011"
+      },
+      {
+        "pattern": "Orange-3-1",
+        "stop": "70011",
+        "entrance": "door-rugg-forsyth",
+        "meters": 170,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70010"
+      }
+    ]
+  },
+  {
+    "id": "plaza",
+    "name": "Plaza Pantry",
+    "neighborhood": "Downtown",
+    "zip": "02108",
+    "isDemo": true,
+    "lat": 42.360099,
+    "lng": -71.05896,
+    "address": "Simulated pickup near City Hall Plaza, Downtown",
+    "serviceArea": "Boston demonstration area",
+    "instructions": "Simulated appointment session. Ask at the check-in table.",
+    "parking": "Unverified",
+    "contact": "No public contact for this fictional pantry",
+    "source": "SaverMeal fictional sessions; MBTA GTFS entrance coordinates",
+    "retrievedAt": "2026-11-22",
+    "access": [
+      {
+        "pattern": "Blue-6-0",
+        "stop": "70039",
+        "entrance": "door-gover-main",
+        "meters": 100,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70040"
+      },
+      {
+        "pattern": "Blue-6-1",
+        "stop": "70040",
+        "entrance": "door-gover-main",
+        "meters": 100,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70039"
+      },
+      {
+        "pattern": "Green-B-812-1",
+        "stop": "70201",
+        "entrance": "door-gover-main",
+        "meters": 100,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70202"
+      },
+      {
+        "pattern": "Green-C-832-1",
+        "stop": "70201",
+        "entrance": "door-gover-main",
+        "meters": 100,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70202"
+      },
+      {
+        "pattern": "Green-D-855-0",
+        "stop": "70202",
+        "entrance": "door-gover-main",
+        "meters": 100,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70201"
+      },
+      {
+        "pattern": "Green-D-855-1",
+        "stop": "70201",
+        "entrance": "door-gover-main",
+        "meters": 100,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70202"
+      },
+      {
+        "pattern": "Green-E-886-0",
+        "stop": "70202",
+        "entrance": "door-gover-main",
+        "meters": 100,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70201"
+      },
+      {
+        "pattern": "Green-E-886-1",
+        "stop": "70201",
+        "entrance": "door-gover-main",
+        "meters": 100,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70202"
+      }
+    ]
+  },
+  {
+    "id": "kenmore",
+    "name": "Kenmore Shelf",
+    "neighborhood": "Fenway",
+    "zip": "02215",
+    "isDemo": true,
+    "lat": 42.349673,
+    "lng": -71.095149,
+    "address": "Simulated pickup near Boston University, Beacon St, Fenway",
+    "serviceArea": "Boston demonstration area",
+    "instructions": "Walk-up. Select your own items.",
+    "parking": "Unverified",
+    "contact": "No public contact for this fictional pantry",
+    "source": "SaverMeal fictional sessions; MBTA GTFS entrance coordinates",
+    "retrievedAt": "2026-11-22",
+    "access": [
+      {
+        "pattern": "Green-B-812-0",
+        "stop": "71151",
+        "entrance": "door-kencl-beacon",
+        "meters": 260,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "71150"
+      },
+      {
+        "pattern": "Green-B-812-1",
+        "stop": "71150",
+        "entrance": "door-kencl-beacon",
+        "meters": 260,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "71151"
+      },
+      {
+        "pattern": "Green-C-832-0",
+        "stop": "70151",
+        "entrance": "door-kencl-beacon",
+        "meters": 260,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70150"
+      },
+      {
+        "pattern": "Green-C-832-1",
+        "stop": "70150",
+        "entrance": "door-kencl-beacon",
+        "meters": 260,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70151"
+      },
+      {
+        "pattern": "Green-D-855-0",
+        "stop": "70151",
+        "entrance": "door-kencl-beacon",
+        "meters": 260,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70150"
+      },
+      {
+        "pattern": "Green-D-855-1",
+        "stop": "70150",
+        "entrance": "door-kencl-beacon",
+        "meters": 260,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70151"
+      }
+    ]
+  },
+  {
+    "id": "andrew",
+    "name": "Andrew Square Table",
+    "neighborhood": "South Boston",
+    "zip": "02127",
+    "isDemo": true,
+    "lat": 42.330417,
+    "lng": -71.056909,
+    "address": "Simulated pickup near Street, Buses, South Boston",
+    "serviceArea": "Boston demonstration area",
+    "instructions": "Simulated appointment session. Ask at the check-in table.",
+    "parking": "Unverified",
+    "contact": "No public contact for this fictional pantry",
+    "source": "SaverMeal fictional sessions; MBTA GTFS entrance coordinates",
+    "retrievedAt": "2026-11-22",
+    "access": [
+      {
+        "pattern": "Red-1-0",
+        "stop": "70083",
+        "entrance": "door-andrw-dotave",
+        "meters": 430,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70084"
+      },
+      {
+        "pattern": "Red-3-0",
+        "stop": "70083",
+        "entrance": "door-andrw-dotave",
+        "meters": 430,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70084"
+      },
+      {
+        "pattern": "Red-1-1",
+        "stop": "70084",
+        "entrance": "door-andrw-dotave",
+        "meters": 430,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70083"
+      },
+      {
+        "pattern": "Red-3-1",
+        "stop": "70084",
+        "entrance": "door-andrw-dotave",
+        "meters": 430,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70083"
+      }
+    ]
+  },
+  {
+    "id": "maverick",
+    "name": "Lewis Mall Kitchen",
+    "neighborhood": "East Boston",
+    "zip": "02128",
+    "isDemo": true,
+    "lat": 42.368675,
+    "lng": -71.040139,
+    "address": "Simulated pickup near Lewis Mall, East Boston",
+    "serviceArea": "Boston demonstration area",
+    "instructions": "Walk-up. Select your own items.",
+    "parking": "Unverified",
+    "contact": "No public contact for this fictional pantry",
+    "source": "SaverMeal fictional sessions; MBTA GTFS entrance coordinates",
+    "retrievedAt": "2026-11-22",
+    "access": [
+      {
+        "pattern": "Blue-6-0",
+        "stop": "70045",
+        "entrance": "door-mvbcl-lewis",
+        "meters": 190,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70046"
+      },
+      {
+        "pattern": "Blue-6-1",
+        "stop": "70046",
+        "entrance": "door-mvbcl-lewis",
+        "meters": 190,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70045"
+      }
+    ]
+  },
+  {
+    "id": "dewey",
+    "name": "Dewey Square Pantry",
+    "neighborhood": "Downtown",
+    "zip": "02110",
+    "isDemo": true,
+    "lat": 42.353286,
+    "lng": -71.055105,
+    "address": "Simulated pickup near 4 | Dewey Sq, Downtown",
+    "serviceArea": "Boston demonstration area",
+    "instructions": "Simulated appointment session. Ask at the check-in table.",
+    "parking": "Unverified",
+    "contact": "No public contact for this fictional pantry",
+    "source": "SaverMeal fictional sessions; MBTA GTFS entrance coordinates",
+    "retrievedAt": "2026-11-22",
+    "access": [
+      {
+        "pattern": "741-_-1",
+        "stop": "74617",
+        "entrance": "door-sstat-dewey",
+        "meters": 110,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "84611"
+      },
+      {
+        "pattern": "Red-1-0",
+        "stop": "70079",
+        "entrance": "door-sstat-dewey",
+        "meters": 110,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70080"
+      },
+      {
+        "pattern": "Red-3-0",
+        "stop": "70079",
+        "entrance": "door-sstat-dewey",
+        "meters": 110,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70080"
+      },
+      {
+        "pattern": "Red-1-1",
+        "stop": "70080",
+        "entrance": "door-sstat-dewey",
+        "meters": 110,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70079"
+      },
+      {
+        "pattern": "Red-3-1",
+        "stop": "70080",
+        "entrance": "door-sstat-dewey",
+        "meters": 110,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70079"
+      }
+    ]
+  },
+  {
+    "id": "symphony",
+    "name": "Symphony Community Table",
+    "neighborhood": "Fenway",
+    "zip": "02115",
+    "isDemo": true,
+    "lat": 42.342857,
+    "lng": -71.084462,
+    "address": "Simulated pickup near Massachusetts Ave, Symphony Hall, Fenway",
+    "serviceArea": "Boston demonstration area",
+    "instructions": "Walk-up. Select your own items.",
+    "parking": "Unverified",
+    "contact": "No public contact for this fictional pantry",
+    "source": "SaverMeal fictional sessions; MBTA GTFS entrance coordinates",
+    "retrievedAt": "2026-11-22",
+    "access": [
+      {
+        "pattern": "39-3-0",
+        "stop": "31391",
+        "entrance": "31391",
+        "meters": 590,
+        "method": "Street-stop desk review; estimated sidewalk distance",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Street crossing and curb access unknown",
+        "returnStop": "91317"
+      },
+      {
+        "pattern": "39-3-1",
+        "stop": "91317",
+        "entrance": "91317",
+        "meters": 650,
+        "method": "Street-stop desk review; estimated sidewalk distance",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Street crossing and curb access unknown",
+        "returnStop": "31391"
+      },
+      {
+        "pattern": "Green-E-886-0",
+        "stop": "70241",
+        "entrance": "door-symcl-ebsymphony",
+        "meters": 230,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70242"
+      },
+      {
+        "pattern": "Green-E-886-1",
+        "stop": "70242",
+        "entrance": "door-symcl-ebsymphony",
+        "meters": 230,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70241"
+      }
+    ]
+  },
+  {
+    "id": "hynes",
+    "name": "Newbury Pantry",
+    "neighborhood": "Back Bay",
+    "zip": "02115",
+    "isDemo": true,
+    "lat": 42.348551,
+    "lng": -71.087155,
+    "address": "Simulated pickup near Newbury St, Back Bay",
+    "serviceArea": "Boston demonstration area",
+    "instructions": "Simulated appointment session. Ask at the check-in table.",
+    "parking": "Unverified",
+    "contact": "No public contact for this fictional pantry",
+    "source": "SaverMeal fictional sessions; MBTA GTFS entrance coordinates",
+    "retrievedAt": "2026-11-22",
+    "access": [
+      {
+        "pattern": "1-_-0",
+        "stop": "93",
+        "entrance": "93",
+        "meters": 200,
+        "method": "Street-stop desk review; estimated sidewalk distance",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Street crossing and curb access unknown",
+        "returnStop": "79"
+      },
+      {
+        "pattern": "1-_-1",
+        "stop": "79",
+        "entrance": "79",
+        "meters": 260,
+        "method": "Street-stop desk review; estimated sidewalk distance",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Street crossing and curb access unknown",
+        "returnStop": "93"
+      },
+      {
+        "pattern": "Green-B-812-0",
+        "stop": "70153",
+        "entrance": "door-hymnl-newbury",
+        "meters": 140,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70152"
+      },
+      {
+        "pattern": "Green-B-812-1",
+        "stop": "70152",
+        "entrance": "door-hymnl-newbury",
+        "meters": 140,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70153"
+      },
+      {
+        "pattern": "Green-C-832-0",
+        "stop": "70153",
+        "entrance": "door-hymnl-newbury",
+        "meters": 140,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70152"
+      },
+      {
+        "pattern": "Green-C-832-1",
+        "stop": "70152",
+        "entrance": "door-hymnl-newbury",
+        "meters": 140,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70153"
+      },
+      {
+        "pattern": "Green-D-855-0",
+        "stop": "70153",
+        "entrance": "door-hymnl-newbury",
+        "meters": 140,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70152"
+      },
+      {
+        "pattern": "Green-D-855-1",
+        "stop": "70152",
+        "entrance": "door-hymnl-newbury",
+        "meters": 140,
+        "method": "GTFS entrance desk review; simulated approach",
+        "verifiedAt": "2026-11-22",
+        "accessibility": "Step-free path to the demo table unknown",
+        "returnStop": "70153"
+      }
+    ]
+  }
+]
