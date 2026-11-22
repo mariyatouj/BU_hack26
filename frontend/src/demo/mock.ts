@@ -233,7 +233,7 @@ export const mock: Api = {
       routing_mode: 'external' as const,
       generated_at: iso(now()),
       origin_stored: false as const,
-      // Origin is deliberately omitted so Pantry Pass never writes it into browser history.
+      // Origin is deliberately omitted so SaverMeal never writes it into browser history.
       directions_url: `https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=transit`,
       origin_stops: [],
       destination_stops: [],

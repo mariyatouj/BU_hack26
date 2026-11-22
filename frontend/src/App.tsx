@@ -91,7 +91,7 @@ export default function App() {
     loc, setLoc, pantries, reloadPantries, go, focusPantry,
   } : null, [conn, me, users, loc, pantries, focusPantry]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!ctx) return <div className="boot"><Logo /><p>Loading Pantry Pass…</p></div>
+  if (!ctx) return <div className="boot"><Logo /><p>Loading SaverMeal…</p></div>
 
   return (
     <AppCtx.Provider value={ctx}>
@@ -102,9 +102,9 @@ export default function App() {
           {drawerOpen ? 'Close menu' : 'Menu'}
         </button>
         {drawerOpen && <div className="drawer-scrim" aria-hidden="true" onClick={closeDrawer} />}
-        <aside id="sidebar" className="sidebar" aria-label="Pantry Pass sidebar">
-          <a className="brand" href="#pantries" aria-label="Pantry Pass home" onClick={() => { setFocusPantry(null); if (drawerOpen) closeDrawer() }}>
-            <Logo /><span className="sidebar-label">Pantry Pass<small>Boston</small></span>
+        <aside id="sidebar" className="sidebar" aria-label="SaverMeal sidebar">
+          <a className="brand" href="#pantries" aria-label="SaverMeal home" onClick={() => { setFocusPantry(null); if (drawerOpen) closeDrawer() }}>
+            <Logo /><span className="sidebar-label">SaverMeal<small>Boston</small></span>
           </a>
           <button className="btn sidebar-toggle" type="button" aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
             aria-expanded={!sidebarCollapsed} aria-controls="sidebar" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}>
@@ -147,7 +147,7 @@ export default function App() {
             {view === 'me' && <MeView />}
           </main>
           {view !== 'pantries' && <footer className="foot">
-            <span>Pantry Pass · BostonHacks 2026 · Boundless Boston track</span>
+            <span>SaverMeal · BostonHacks 2026 · Boundless Boston track</span>
             <span className="muted">Historical public pantry directory · Demo inventory · Call ahead before visiting.</span>
           </footer>}
         </div>
