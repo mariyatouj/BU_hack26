@@ -35,6 +35,44 @@ const switchValue = (arr: string[], key: string) =>
   arr.includes(key) ? arr.filter((i) => i !== key) : [...arr, key]
 const names = (arr: string[]) => arr.map(label).join(', ') || 'None'
 
+function PlateIllustration({ id }: { id: string }) {
+  const palettes: Record<string, [string, string, string]> = {
+    dal: ['#d95338', '#f59e0b', '#78350f'],
+    beans: ['#292524', '#f5f5f4', '#b45309'],
+    chana: ['#d97706', '#dc2626', '#15803d'],
+    miso: ['#fef3c7', '#78716c', '#15803d'],
+    oats: ['#fbbf24', '#fef08a', '#78350f'],
+    salad: ['#84cc16', '#f59e0b', '#eab308'],
+    pasta: ['#fde047', '#d97706', '#15803d'],
+    hash: ['#a8a29e', '#f59e0b', '#15803d'],
+    menemen: ['#ef4444', '#f59e0b', '#16a34a'],
+    soup: ['#ea580c', '#f97316', '#78350f'],
+    congee: ['#f5f5f4', '#fef08a', '#16a34a'],
+    slaw: ['#84cc16', '#a855f7', '#facc15'],
+    toast: ['#d97706', '#f5f5f4', '#15803d'],
+    stew: ['#b45309', '#dc2626', '#f59e0b'],
+    taco: ['#eab308', '#292524', '#16a34a'],
+    peas: ['#22c55e', '#f5f5f4', '#a8a29e'],
+    fried: ['#f59e0b', '#22c55e', '#f5f5f4'],
+    porridge: ['#fef08a', '#f5f5f4', '#b45309'],
+    wrap: ['#fef08a', '#d97706', '#16a34a'],
+    ricepudding: ['#f5f5f4', '#fef08a', '#78350f'],
+  }
+  const [c1, c2, c3] = palettes[id] ?? ['#f59e0b', '#ef4444', '#22c55e']
+  return (
+    <svg className="plate-graphic" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+      <rect width="44" height="44" rx="10" fill="var(--surface)" />
+      <ellipse cx="22" cy="24" rx="15" ry="12" fill="var(--card)" stroke="var(--line-strong)" strokeWidth="1" />
+      <ellipse cx="22" cy="24" rx="11" ry="8" fill="var(--bg)" opacity="0.75" />
+      <circle cx="18" cy="23" r="4.2" fill={c1} />
+      <circle cx="26" cy="22" r="3.8" fill={c2} />
+      <circle cx="22" cy="26" r="3.2" fill={c3} />
+      <path d="M19 11C18 9 20 7 19 5 M25 12C24 10 26 8 25 6" stroke="var(--ink)" strokeWidth="1.2" strokeLinecap="round" opacity="0.25" />
+      <path d="M21 18C21 18 23 19 25 18C25 20 23 21 21 21V18Z" fill="var(--fresh-ink)" opacity="0.95" />
+    </svg>
+  )
+}
+
 export function Checks({
   legend,
   values,
@@ -364,7 +402,13 @@ export default function Explore({ f, setF }: { f: Search; setF: (f: Search) => v
     <>
       <header className="explore-intro">
         <div className="intro-copy">
-          <h1>Cook Your Next Meal At Home–And Pay Nothing for the Ingredients</h1>
+          <div className="quest-hero-badge">
+            <span className="quest-badge-icon" aria-hidden="true">🌱</span>
+            <strong>Boston Pantry Quest</strong>
+            <span className="quest-badge-divider" aria-hidden="true">·</span>
+            <span>Level 1 Community Cook (+100 pts/meal)</span>
+          </div>
+          <h1>What can I cook?</h1>
           <p>Find meals using real-time stock from a Boston pantry and ingredients already in your kitchen.</p>
           <a
             className="intro-link"
@@ -570,6 +614,8 @@ export default function Explore({ f, setF }: { f: Search; setF: (f: Search) => v
               sites={ranked.map((c) => c.site)}
               onOrigin={(pos) => change({ origin: pos, scope: 'radius' })}
               onSite={chooseFromMap}
+              onRouteSelect={(routeId) => change({ scope: 'transit', route: routeId, direction: '' })}
+              onResetScope={() => change({ scope: 'radius' })}
             />
           </div>
         </section>
@@ -626,13 +672,23 @@ export default function Explore({ f, setF }: { f: Search; setF: (f: Search) => v
               const availableCount = snap.items.filter(
                 (i) => status(i, snap, state.clock) === 'available',
               ).length
+              const stockClass = !open
+                ? 'stock-closed'
+                : snap.capacity === 'Limited capacity'
+                  ? 'stock-medium'
+                  : 'stock-high'
               return (
-                <article className="result-card" key={site.id}>
+                <article className={'result-card ' + stockClass} key={site.id}>
                   <header className="card-header">
                     <div>
                       <div className="card-badges">
                         <span className="hood-badge">{site.neighborhood}</span>
                         <span className="demo-tag">Fictional pantry</span>
+                        {unique(site.access.map((a) => a.pattern.split('-')[0])).map((line) => (
+                          <span key={line} className={`site-transit-tag tag-${line.toLowerCase()}`}>
+                            {line === '741' ? 'Silver Line' : line === '1' || line === '39' ? `Bus ${line}` : `${line} Line`}
+                          </span>
+                        ))}
                       </div>
                       <h2>
                         <button className="title-button" onClick={() => choose(site.id)}>
@@ -676,10 +732,17 @@ export default function Explore({ f, setF }: { f: Search; setF: (f: Search) => v
                             aria-expanded={active === key}
                             onClick={() => setActive(active === key ? '' : key)}
                           >
+                            <PlateIllustration id={r.recipe.id} />
                             <div className="meal-heading-group">
-                              <strong>{r.recipe.title}</strong>
+                              <div className="meal-title-row">
+                                <strong>{r.recipe.title}</strong>
+                                <span className="bounty-pill" title="Earn 100 points for cooking this recipe">
+                                  +100 pts
+                                </span>
+                              </div>
                               <span className="meal-meta">
                                 {r.recipe.cuisine} · {r.recipe.minutes} min
+                                {r.match.complete && <span className="ready-sparkle"> · ✨ Ready to cook</span>}
                               </span>
                             </div>
                             <span className="meal-chevron" aria-hidden="true">

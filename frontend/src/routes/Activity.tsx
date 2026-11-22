@@ -337,16 +337,30 @@ export function Wallet() {
         <h1>Private wallet</h1>
         <p>Cooking awards and simulated sponsor-funded reservations.</p>
       </header>
-      <div className="wallet-total">
-        <div className="wallet-balance-info">
-          <span>Available balance</span>
-          <strong>
-            {balance(state)} <small>demo points</small>
-          </strong>
+      <div className="wallet-total charlie-card">
+        <div className="charlie-card-header">
+          <div className="charlie-t-logo">
+            <span className="t-circle">T</span>
+            <span className="charlie-brand">SaverMeal</span>
+          </div>
+          <span className="charlie-line-tag">Green Line</span>
         </div>
-        <div className="wallet-balance-badge">
-          <span>Boston Demo Account</span>
-          <small>Points stored locally in browser</small>
+        <div className="charlie-chip-row">
+          <div className="charlie-chip" aria-hidden="true" />
+          <span className="charlie-wave" aria-hidden="true">))))</span>
+          <span className="charlie-level-pill">★ Level 1 Community Chef</span>
+        </div>
+        <div className="charlie-balance-row">
+          <div className="wallet-balance-info">
+            <span>Available balance</span>
+            <strong>
+              {balance(state)} <small>demo points</small>
+            </strong>
+          </div>
+          <div className="wallet-balance-badge charlie-holder">
+            <span>Boston Community Pass</span>
+            <small>Stored in browser</small>
+          </div>
         </div>
       </div>
       <h2 className="section-title">Rewards</h2>

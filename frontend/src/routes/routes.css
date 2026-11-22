@@ -78,15 +78,22 @@
   color: var(--ink);
 }
 .balance-pill {
-  background: var(--amber-bg);
-  color: var(--amber-ink);
-  border: 1px solid var(--amber-border);
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #78350f;
+  border: 1px solid #f59e0b;
   border-radius: var(--radius-pill);
   padding: 6px 14px;
   font-weight: 800;
+  box-shadow: 0 2px 0 #d97706, 0 3px 8px rgba(180, 83, 9, 0.15);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 .balance-pill:hover {
-  filter: brightness(0.97);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 #d97706, 0 5px 12px rgba(180, 83, 9, 0.22);
+}
+.balance-pill:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #d97706;
 }
 
 /* Simulated Time & Notice Banner */
@@ -181,14 +188,35 @@
   color: #ffffff;
 }
 
-/* Explore Layout */
+/* Explore Layout - Balanced & Unified */
 .explore-layout {
   display: grid;
-  grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
-  grid-template-rows: max-content 1fr;
-  grid-template-areas: 'filters results' 'map results';
-  gap: 20px clamp(18px, 3vw, 40px);
+  grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
+  grid-template-areas:
+    'filters map'
+    'filters results';
+  gap: 20px clamp(16px, 2.5vw, 32px);
   align-items: start;
+}
+.quest-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px 8px;
+  background: var(--amber-bg);
+  border: 1px solid var(--amber-border);
+  color: var(--amber-ink);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(180, 83, 9, 0.08);
+}
+.quest-badge-icon {
+  font-size: 1rem;
+}
+.quest-badge-divider {
+  opacity: 0.45;
 }
 .search-tools {
   grid-area: filters;
@@ -201,6 +229,7 @@
 .map-panel {
   grid-area: map;
   min-width: 0;
+  width: 100%;
 }
 .map-toggle {
   display: none;
@@ -241,6 +270,23 @@
 .wallet-total {
   padding: clamp(16px, 2.4vw, 24px);
 }
+
+/* Result Card Left-Edge Stock Status Bar */
+.result-card {
+  display: grid;
+  gap: 10px;
+  border-left-width: 6px;
+}
+.result-card.stock-high {
+  border-left-color: var(--fresh-ink);
+}
+.result-card.stock-medium {
+  border-left-color: var(--amber);
+}
+.result-card.stock-closed {
+  border-left-color: var(--line-strong);
+}
+
 .panel {
   display: grid;
   gap: 14px;
@@ -405,55 +451,204 @@
   background: var(--surface);
 }
 
-/* Route Map */
+/* Route Map & Transit Navigator HUD */
 .route-map {
   margin: 0;
   overflow: hidden;
   background: var(--map-land);
   border-radius: var(--radius);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+.map-transit-bar {
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  padding: 8px 14px;
+  display: grid;
+  gap: 8px;
+}
+.map-transit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+.map-transit-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.map-transit-t-badge {
+  width: 20px;
+  height: 20px;
+  background: #1b4d2e;
+  color: #ffffff;
+  border-radius: 50%;
+  font-family: var(--font-body);
+  font-weight: 900;
+  font-size: 0.78rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.map-transit-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.map-transit-status {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+.map-transit-pills {
+  display: flex;
+  align-items: center;
+  gap: 5px 6px;
+  flex-wrap: wrap;
+}
+.transit-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.12s ease;
+}
+.transit-pill:hover {
+  border-color: var(--pill-color, var(--line-strong));
+  background: var(--card);
+  transform: translateY(-1px);
+}
+.transit-pill:active {
+  transform: translateY(1px);
+}
+.transit-pill.active {
+  background: var(--card);
+  border-color: var(--pill-color, var(--brand));
+  box-shadow: 0 0 0 1.5px var(--pill-color, var(--brand));
+  font-weight: 800;
+}
+.transit-pill-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
 }
 .route-map svg {
   display: block;
   width: 100%;
-  height: auto;
+  max-height: 230px;
+  margin: 0 auto;
 }
 .route-map .origin-map {
   cursor: crosshair;
 }
-.route-map g[role='button'] {
+.pantry-pin-marker {
   cursor: pointer;
-  transition: transform 0.15s ease;
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.route-map g[role='button']:hover {
-  transform: scale(1.15);
+.pantry-pin-marker:hover,
+.pantry-pin-marker:focus-visible {
+  transform: scale(1.22) translateY(-2px);
+  outline: none;
 }
-.route-map g[role='button']:focus-visible .pantry-pin {
+.pantry-pin-marker:focus-visible .pantry-pin {
   stroke: var(--focus);
-  stroke-width: 6px;
+  stroke-width: 5px;
+}
+.pantry-pin {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.28));
+  transition: fill 0.15s ease;
+}
+.pantry-pin-marker:hover .pantry-pin {
+  fill: #962a1c;
+}
+.pantry-pin-label {
+  font: 800 11px var(--font-body);
+  fill: var(--ink);
+  paint-order: stroke;
+  stroke: var(--card);
+  stroke-width: 3.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+  letter-spacing: 0.02em;
 }
 .map-hood {
-  font: 700 20px var(--font-body);
+  font: 800 13px var(--font-body);
   fill: var(--muted);
-  opacity: 0.6;
+  opacity: 0.55;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   pointer-events: none;
 }
-.route-map figcaption {
-  font-size: 0.78rem;
-  padding: 10px 14px;
+.route-map-caption {
+  font-size: 0.74rem;
+  padding: 7px 14px;
   color: var(--muted);
   background: var(--card);
   border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+.map-legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.74rem;
+  color: var(--ink);
+}
+.legend-dot.pin {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ba3828;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+.legend-line.transit {
+  width: 14px;
+  height: 4px;
+  border-radius: 2px;
+  background: #00843D;
+}
+.legend-dot.radius {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1d4ed8;
+  border: 1.5px solid #ffffff;
+}
+.map-attribution {
+  font-size: 0.74rem;
 }
 
-/* Pantry Result Card */
-.results {
-  display: grid;
-  gap: 18px;
-}
-.result-card {
-  display: grid;
-  gap: 10px;
-}
+/* Pantry Result Card Header */
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -481,6 +676,35 @@
 .demo-tag {
   font-size: 0.74rem;
   color: var(--muted);
+}
+.site-transit-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+.site-transit-tag.tag-green {
+  background: #00843D;
+}
+.site-transit-tag.tag-red {
+  background: #DA291C;
+}
+.site-transit-tag.tag-orange {
+  background: #ED8B00;
+}
+.site-transit-tag.tag-blue {
+  background: #003DA5;
+}
+.site-transit-tag.tag-741 {
+  background: #7C878E;
+}
+.site-transit-tag.tag-1,
+.site-transit-tag.tag-39 {
+  background: #b45309;
 }
 .title-button {
   font: inherit;
@@ -584,17 +808,49 @@
 }
 .meal-button {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 20px;
+  grid-template-columns: auto minmax(0, 1fr) 20px;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   text-align: left;
   width: 100%;
-  padding: 3px 0;
+  padding: 4px 0;
+}
+.plate-graphic {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 9px;
+  box-shadow: var(--shadow-sm);
 }
 .meal-heading-group {
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+.meal-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.bounty-pill {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #78350f;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.02em;
+  box-shadow: 0 1px 2px rgba(180, 83, 9, 0.1);
+}
+.ready-sparkle {
+  color: var(--fresh-ink);
+  font-weight: 700;
+}
+.meal-row:hover .plate-graphic {
+  transform: rotate(-3deg) scale(1.08);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .meal-button strong {
   font-size: 1.05rem;
@@ -624,6 +880,7 @@
   color: var(--muted);
   font-size: 0.82rem;
   margin-top: 2px;
+  padding-left: 56px;
 }
 .match-line[data-complete='true'] {
   color: var(--fresh-ink);
@@ -989,47 +1246,139 @@
   gap: 8px;
 }
 
-/* Wallet Card & Rewards */
-.wallet-total {
-  background: var(--amber-bg);
-  border: 1px solid var(--amber-border);
-  color: var(--ink);
+/* Authentic MBTA CharlieCard Replica on Wallet */
+.wallet-total.charlie-card {
+  background: linear-gradient(135deg, #1b4d2e 0%, #153e25 100%);
+  border: 1px solid #2d6b43;
+  color: #ffffff;
+  display: grid;
+  gap: 16px;
+  padding: clamp(22px, 3.5vw, 32px);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(27, 77, 46, 0.28);
+  position: relative;
+  overflow: hidden;
+}
+.wallet-total.charlie-card::after {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -20%;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.charlie-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-  padding: clamp(20px, 3.5vw, 32px);
 }
-.wallet-balance-info span {
-  font-size: 0.86rem;
+.charlie-t-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.t-circle {
+  width: 28px;
+  height: 28px;
+  background: #ffffff;
+  color: #153e25;
+  border-radius: 50%;
+  font-family: var(--font-body);
+  font-weight: 900;
+  font-size: 1.05rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.charlie-brand {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+.charlie-line-tag {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  color: #d2f0d9;
+}
+.charlie-chip-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.charlie-chip {
+  width: 34px;
+  height: 26px;
+  background: linear-gradient(135deg, #fcd34d 0%, #b45309 100%);
+  border-radius: 5px;
+  border: 1px solid #78350f;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+.charlie-wave {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+  letter-spacing: -2px;
+  transform: rotate(90deg);
+}
+.charlie-level-pill {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #d2f0d9;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  margin-inline-start: auto;
+}
+.charlie-balance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: 14px;
+}
+.wallet-total.charlie-card .wallet-balance-info span {
+  font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--amber-ink);
-}
-.wallet-total strong {
+  color: #d2f0d9;
   display: block;
-  font: 3rem/1.1 var(--font-display);
-  color: var(--ink);
-  margin-top: 4px;
 }
-.wallet-total small {
-  font: 700 1rem var(--font-body);
-  color: var(--muted);
+.wallet-total.charlie-card strong {
+  display: block;
+  font: 2.8rem/1.1 var(--font-display);
+  color: #ffffff;
+  margin-top: 2px;
 }
-.wallet-balance-badge {
+.wallet-total.charlie-card small {
+  font: 700 0.95rem var(--font-body);
+  color: #d2f0d9;
+}
+.charlie-holder {
   text-align: right;
 }
-.wallet-balance-badge span {
+.charlie-holder span {
   display: block;
   font-weight: 800;
   font-size: 0.92rem;
-  color: var(--amber-ink);
+  color: #ffffff;
 }
-.wallet-balance-badge small {
-  font-size: 0.8rem;
-  color: var(--muted);
+.charlie-holder small {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.75);
 }
 
 /* Reward Passes Grid */
@@ -1260,6 +1609,19 @@
     display: block;
     margin-top: 10px;
   }
+  .map-transit-pills {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .route-map svg {
+    max-height: 380px;
+  }
+  .route-map-caption {
+    flex-direction: column;
+    align-items: flex-start;
+  }
   .mast nav {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
@@ -1306,14 +1668,24 @@
     font-size: 0.84rem;
   }
   .meal-button {
-    grid-template-columns: minmax(0, 1fr) 18px;
-    gap: 8px;
+    grid-template-columns: auto minmax(0, 1fr) 18px;
+    gap: 10px;
   }
-  .wallet-total {
+  .plate-graphic {
+    width: 38px;
+    height: 38px;
+  }
+  .match-line {
+    padding-left: 48px;
+  }
+  .wallet-total.charlie-card {
+    padding: 18px;
+  }
+  .charlie-balance-row {
     flex-direction: column;
     align-items: flex-start;
   }
-  .wallet-balance-badge {
+  .charlie-holder {
     text-align: left;
   }
 }
