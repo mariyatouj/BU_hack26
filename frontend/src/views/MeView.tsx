@@ -24,7 +24,7 @@ export default function MeView() {
     <div className="page">
       <section className="me-card">
         <div className="charlie">
-          <div className="charlie-top"><span className="charlie-brand"><img src={trainIcon} width="28" height="28" alt="" />Pantry Pass</span><span>{me.t_line ? `${me.t_line} Line` : ''}</span></div>
+          <div className="charlie-top"><span className="charlie-brand"><img src={trainIcon} width="28" height="28" alt="" />SaverMeal</span><span>{me.t_line ? `${me.t_line} Line` : ''}</span></div>
           <div className="charlie-mid"><Avatar name={me.name} line={me.t_line} size={64} /><div><strong>{me.name}</strong><span>{me.university}</span></div></div>
           <div className="charlie-bot"><b>{me.points}</b><span>points · {me.level}</span></div>
         </div>

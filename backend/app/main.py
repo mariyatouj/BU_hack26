@@ -1,4 +1,4 @@
-"""Pantry Pass API (v1).  Run:  uvicorn app.main:app --reload   (from backend/)
+"""SaverMeal API (v1).  Run:  uvicorn app.main:app --reload   (from backend/)
 
 Auth is stubbed for the hackathon: send `X-User-Id: <id>` (defaults to user 1).
 """
@@ -30,7 +30,7 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="Pantry Pass API", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="SaverMeal API", version="1.0.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=os.getenv("CORS_ORIGINS", "*").split(","),

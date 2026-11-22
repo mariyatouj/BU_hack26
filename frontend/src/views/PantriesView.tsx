@@ -226,7 +226,7 @@ function Detail({ id, onBack, onRecipeShared }: { id: number; onBack: () => void
         <button className="btn" onClick={() => setRating(true)}>Rate <small>+5</small></button>
         <button className="btn" onClick={() => setStock(true)}>Report stock <small>+5</small></button>
       </div>
-      <p className="muted small privacy-note">Your device location is requested only when you ask for directions and is not saved. Pantry Pass sends MBTA only a rounded area for nearby-stop lookup; the external route planner receives no origin from us.</p>
+      <p className="muted small privacy-note">Your device location is requested only when you ask for directions and is not saved. SaverMeal sends MBTA only a rounded area for nearby-stop lookup; the external route planner receives no origin from us.</p>
 
       {(directions || directionsError) && (
         <section className="transit-card" aria-live="polite">
@@ -237,7 +237,7 @@ function Detail({ id, onBack, onRecipeShared }: { id: number; onBack: () => void
             </div>
             <a className="btn small primary" href={directions?.directions_url ?? fallbackDirections} target="_blank" rel="noreferrer">Open full route ↗</a>
           </header>
-          {directionsError && <p className="error">{directionsError} You can still open directions without sharing your origin with Pantry Pass.</p>}
+          {directionsError && <p className="error">{directionsError} You can still open directions without sharing your origin with SaverMeal.</p>}
           {directions && directions.origin_stops.length > 0 && (
             <div className="transit-stops">
               <div><strong>Board near you</strong><span>{directions.origin_stops.slice(0, 2).map((s) => `${s.name} (${Math.round(s.distance_m)} m)`).join(' · ')}</span></div>

@@ -1,12 +1,12 @@
-# Pantry Pass Boston (BU_hack26)
+# SaverMeal Boston (BU_hack26)
 
 **BostonHacks 2026 · Boundless Boston track**
 
 Boston residents may live near a food pantry but not know what's on the shelves, how to use it, or what they could cook.
-Pantry Pass is a community-powered platform where residents **discover local pantries**, **share recipes made with pantry food**,
+SaverMeal is a community-powered platform where residents **discover local pantries**, **share recipes made with pantry food**,
 and **earn points toward custom CharlieCards and T-passes** for helping neighbors. University students are the launch community.
 
-> "Pantry Pass" is a working name. The seeded pantry names, addresses, coordinates, and phone numbers are real
+> The seeded pantry names, addresses, coordinates, and phone numbers are real
 > Boston listings from a public City of Boston GIS layer sourced from the Greater Boston Food Bank in September 2021.
 > Details may have changed, so the app tells users to call or check the current GBFB locator before visiting.
 > Inventory, recipes, ratings, activity, and users are explicitly demo data.
