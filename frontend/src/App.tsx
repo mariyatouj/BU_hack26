@@ -38,60 +38,68 @@ function AccessHelp() {
         <h1>Access help</h1>
         <p>Food, transit and cultural access information is open to everyone.</p>
       </header>
-      <section className="panel">
+      <section className="panel resource-card">
         <h2>Find food today</h2>
         <p>
           Explore uses fictional pantry sites and synthetic stock. For an actual pickup, confirm hours,
           eligibility, service area, appointment requirements and access with the pantry.
         </p>
-        <a href="https://www.gbfb.org/need-food/">Find a participating food pantry through GBFB ↗</a>
-        <details>
+        <div className="resource-action">
+          <a className="btn primary" href="https://www.gbfb.org/need-food/" target="_blank" rel="noreferrer">
+            Find a participating food pantry through GBFB ↗
+          </a>
+        </div>
+        <details className="historical-details">
           <summary>Historical Boston directory and contacts</summary>
-          <p>City of Boston GIS / GBFB, September 2021. Call ahead to confirm the listing.</p>
-          {historical.pantries.map((p) => (
-            <p key={p.id}>
-              <b>{p.name}</b> · {p.address} · <a href={'tel:' + p.phone}>{p.phone}</a> ·{' '}
-              <a href={p.source_url}>Directory source</a>
-            </p>
-          ))}
+          <p className="small muted">City of Boston GIS / GBFB, September 2021. Call ahead to confirm the listing.</p>
+          <div className="directory-list">
+            {historical.pantries.map((p) => (
+              <p key={p.id} className="directory-item">
+                <b>{p.name}</b> · {p.address} · <a href={'tel:' + p.phone}>{p.phone}</a> ·{' '}
+                <a href={p.source_url} target="_blank" rel="noreferrer">Directory source</a>
+              </p>
+            ))}
+          </div>
         </details>
       </section>
-      <section className="panel">
+      <section className="panel resource-card">
         <h2>Help with the first trip</h2>
         <p>
           Check existing reduced-fare programs and eligibility before traveling. You can access these
           resources without cooking or collecting points.
         </p>
-        <a href="https://www.mbta.com/fares/reduced">MBTA reduced fares ↗</a>
+        <a className="resource-link" href="https://www.mbta.com/fares/reduced" target="_blank" rel="noreferrer">
+          MBTA reduced fares ↗
+        </a>
       </section>
-      <section className="panel">
+      <section className="panel resource-card">
         <h2>Museums and shows</h2>
         <p>
           Check each venue for eligibility, ticket coverage and reservations. Exhibit admission and show
           tickets can have different conditions.
         </p>
-        <ul>
+        <ul className="venue-list">
           <li>
-            <a href="https://www.mos.org/visit/community-access">Museum of Science community access</a>
+            <a href="https://www.mos.org/visit/community-access" target="_blank" rel="noreferrer">Museum of Science community access</a>
           </li>
           <li>
-            <a href="https://www.neaq.org/visit/offers-and-discounts/">New England Aquarium discounts</a>
+            <a href="https://www.neaq.org/visit/offers-and-discounts/" target="_blank" rel="noreferrer">New England Aquarium discounts</a>
           </li>
           <li>
-            <a href="https://www.mfa.org/visit/free-and-discounted-admission">
+            <a href="https://www.mfa.org/visit/free-and-discounted-admission" target="_blank" rel="noreferrer">
               MFA free and discounted admission
             </a>
           </li>
         </ul>
       </section>
-      <section className="panel">
+      <section className="panel resource-card">
         <h2>Why pantry access matters</h2>
         <p>
           GBFB’s 2026 Massachusetts Food Access Report estimates that 40% of Massachusetts households
           experienced food insecurity in 2025. SaverMeal demonstrates how reachable pantry sessions can
           connect people with meal ideas.
         </p>
-        <a href="https://foodaccessreport.gbfb.org/the-state-of-food-insecurity">
+        <a className="resource-link" href="https://foodaccessreport.gbfb.org/the-state-of-food-insecurity" target="_blank" rel="noreferrer">
           GBFB and Mass General Brigham report ↗
         </a>
       </section>
@@ -196,7 +204,7 @@ export default function App() {
             <strong>Demo</strong> · Fictional pantry sessions
           </span>
           <span className="demo-clock">Simulated {bostonTime(state.clock)} ET</span>
-          <a href="#help">
+          <a href="#help" className="real-help-link">
             Find real food assistance <span aria-hidden="true">↗</span>
           </a>
         </div>

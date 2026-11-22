@@ -43,6 +43,6 @@ Vite dev proxies `/api` to localhost:8000. A hosted frontend can set `VITE_API_U
 
 ## Verification and demonstration
 
-After building both outputs, run `npm run test:e2e` in `frontend` with Chrome installed. Alternatively install Playwright Chromium and set `PW_CHANNEL=chromium`. Browser checks exercise the local preview, private cooking journey, shared state, stock contention, cancellation, mobile layout, offline directions and the portable build. To record the browser flows, install Playwright FFmpeg and set `RECORD_DEMO=1`. Run `npm run record:demo` to regenerate the captioned presenter walkthrough from the production build.
+After building both outputs, run `npm run test:e2e` in `frontend` with Chrome installed. Alternatively install Playwright Chromium and set `PW_CHANNEL=chromium`. Browser checks exercise the local preview, private cooking journey, shared state, stock contention, cancellation, mobile layout, offline directions and the portable build. To record the browser flows, install Playwright FFmpeg and set `RECORD_DEMO=1`. Run `npm run record:demo` to regenerate thehow to  captioned presenter walkthrough from the production build.
 
 [Walkthrough video](docs/walkthrough.webm) · [Presenter script and acceptance checklist](docs/demo-script.md) · [Sources and design decisions](docs/sources.md)

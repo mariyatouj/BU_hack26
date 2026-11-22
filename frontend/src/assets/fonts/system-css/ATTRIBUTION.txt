@@ -1,6 +1,0 @@
-ChiKareGo2 and FindersKeepers by Giles Booth, Creative Commons Attribution.
-The WOFF2 files are unmodified copies from https://github.com/sakofchit/system.css/tree/main/fonts.
-
-Author's listings and license notices:
-ChiKareGo2 — https://www.pentacom.jp/pentacom/bitfontmaker2/gallery/?id=3780
-FindersKeepers — https://www.pentacom.jp/pentacom/bitfontmaker2/gallery/?id=3809
